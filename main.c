@@ -34,10 +34,10 @@ int main(int argc, char* argv[]) {
     
     
     //create a 440hz sine signal lasting 2s
-    ATTEMPT(sine_signal_l = new_sine_test(440.0, 2000.0));
+    ATTEMPT(sine_signal_l = new_sine_test(440.0, 10000.0));
     
     //create a 554.37hz sine signal lasting 2s
-    ATTEMPT(sine_signal_r = new_sine_test(554.37, 2000.0));
+    ATTEMPT(sine_signal_r = new_sine_test(554.37, 12000.0));
     
     //convert the mono signals into stereo signals 
     ATTEMPT(sine_l_stereo_signal = new_sssf_from_ssmf(sine_signal_l)); 
