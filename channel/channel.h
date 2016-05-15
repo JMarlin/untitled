@@ -80,5 +80,6 @@ SignalSourceStereo_f* new_sssf(GeneratorFunctionStereo_f generator);
 SignalSourceStereo_i16* new_sssi16(GeneratorFunctionStereo_i16 generator);
 StereoChannel_f* new_scf(SignalSourceStereo_f* audio_signal, SignalSourceMono_f* pan_signal, SignalSourceMono_f* gain_signal);
 SignalSourceMono_f* new_const_signal_mf(float value);
+StereoChannel_i16* new_sci16(SignalSourceStereo_i16* signal);
 
 #endif //CHANNEL_H

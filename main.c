@@ -10,6 +10,7 @@ int main(int argc, char* argv[]) {
     SignalSourceMono_f* channel_pan;
     SignalSourceMono_f* channel_gain;
     StereoChannel_f* stereo_channel;
+    SignalSourceStereo_i16* i16_signal;
     StereoChannel_i16* i16_channel;
     
     //create a 440hz sine signal lasting 2s
@@ -49,14 +50,26 @@ int main(int argc, char* argv[]) {
         return 0;
     }
     
-    //Convert the float channel into an i16 channel 
-    if(!(i16_channel = new_sssi16_from_scf(stereo_channel))) {
+    //Convert the float channel into an i16 signal
+    if(!(i16_signal = new_sssi16_from_scf(stereo_channel))) {
         
         //delete_sssf_from_ssmf(sine_stereo_signal);
         //delete_sine_test(sine_signal);
         //delete_const_signal_mf(channel_pan);
         //delete_const_signal_mf(channel_gain);
         //delete_scf(stereo_channel);
+        return 0;
+    }
+    
+    //Wrap the i16 signal into an i16 channel
+    if(!(i16_channel = new_sci16(i16_signal))) {
+        
+        //delete_sssf_from_ssmf(sine_stereo_signal);
+        //delete_sine_test(sine_signal);
+        //delete_const_signal_mf(channel_pan);
+        //delete_const_signal_mf(channel_gain);
+        //delete_scf(stereo_channel);
+        //delete_sssi16_from_scf(i16_signal);
         return 0;
     }
     
@@ -69,5 +82,7 @@ int main(int argc, char* argv[]) {
     //delete_const_signal_mf(channel_pan);
     //delete_const_signal_mf(channel_gain);
     //delete_scf(stereo_channel);
+    //delete_sssi16_from_scf(i16_signal);
+    //delete_sci16(i16_channel);
     return 0;
 }

@@ -303,3 +303,15 @@ SignalSourceMono_f* new_const_signal_mf(float value) {
     
     return const_signal;
 }
+
+StereoChannel_i16* new_sci16(SignalSourceStereo_i16* signal) {
+    
+    StereoChannel_i16* channel = (StereoChannel_i16*)malloc(sizeof(StereoChannel_i16));
+    
+    if(!channel)
+        return channel;
+        
+    channel->signal = signal;
+    
+    return channel;
+}
