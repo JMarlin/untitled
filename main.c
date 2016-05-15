@@ -5,26 +5,33 @@
 
 int main(int argc, char* argv[]) {
     
+    SignalSourceMono_f* sine_signal;
+    SignalSourceStereo_f* sine_stereo_signal;
+    SignalSourceMono_f* channel_pan;
+    SignalSourceMono_f* channel_gain;
+    StereoChannel_f* stereo_channel;
+    StereoChannel_i16* i16_channel;
+    
     //create a 440hz sine signal lasting 2s
-    if(!(SignalSourceMono_f* sine_signal = new_sine_test(440.0, 2000.0)))
+    if(!(sine_signal = new_sine_test(440.0, 2000.0)))
         return 0;
     
     //convert the mono signal into a stereo signal 
-    if(!(SignalSourceStereo_f* sine_stereo_signal = new_sssf_from_ssmf(sine_signal))) {
+    if(!(sine_stereo_signal = new_sssf_from_ssmf(sine_signal))) {
         
         //delete_sine_test(sine_signal);
         return 0;
     }
     
     //Create the control signals for a stereo channel 
-    if(!(SignalSourceMono_f* channel_pan = new_const_signal_mf(0.0))) {
+    if(!(channel_pan = new_const_signal_mf(0.0))) {
         
         //delete_sssf_from_ssmf(sine_stereo_signal);
         //delete_sine_test(sine_signal);
         return 0;
     }
     
-    if(!(SignalSourceMono_f* channel_gain = new_const_signal_mf(0.0))) {
+    if(!(channel_gain = new_const_signal_mf(0.0))) {
         
         //delete_sssf_from_ssmf(sine_stereo_signal);
         //delete_sine_test(sine_signal);
@@ -33,7 +40,7 @@ int main(int argc, char* argv[]) {
     }
     
     //Create a stereo float output channel for the stereo signal 
-    if(!(StereoChannel_f* stereo_channel = new_scf(sine_stereo_signal, channel_pan, channel_gain))) {
+    if(!(stereo_channel = new_scf(sine_stereo_signal, channel_pan, channel_gain))) {
         
         //delete_sssf_from_ssmf(sine_stereo_signal);
         //delete_sine_test(sine_signal);
@@ -43,7 +50,7 @@ int main(int argc, char* argv[]) {
     }
     
     //Convert the float channel into an i16 channel 
-    if(!(StereoChannel_i16* i16_channel = new_sssi16_from_scf(stereo_channel))) {
+    if(!(i16_channel = new_sssi16_from_scf(stereo_channel))) {
         
         //delete_sssf_from_ssmf(sine_stereo_signal);
         //delete_sine_test(sine_signal);
