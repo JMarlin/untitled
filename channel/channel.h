@@ -27,7 +27,7 @@ typedef struct MonoChannel_f {
 } MonoChannel_f;
 
 typedef struct StereoChannel_f {
-    SignalSourceStereo_f signal;
+    SignalSourceStereo_f* signal;
     SignalSourceMono_f* pan_signal;
     SignalSourceMono_f* gain_signal;
     float last_pan;

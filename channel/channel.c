@@ -64,7 +64,7 @@ int mcf_pull_next_sample(MonoChannel_f* mono_channel, float* sample) {
     
     float gain_sample;
     int generator_running = ssmf_pull_next_sample(mono_channel->signal, sample);
-    int gain_running = ssmf_pull_next_sample(mono_channel->gain_signal, gain_sample);
+    int gain_running = ssmf_pull_next_sample(mono_channel->gain_signal, &gain_sample);
 
     //Freeze gain setting when gain signal drops
     if(gain_running)
@@ -83,7 +83,7 @@ int mcf_pull_next_sample(MonoChannel_f* mono_channel, float* sample) {
     if(sample[0] < -1)
         sample[0] = -1;
 
-    return running;
+    return generator_running;
 }
 
 int scf_pull_next_sample(StereoChannel_f* stereo_channel, float* l_sample, float* r_sample) {
@@ -223,7 +223,7 @@ SignalSourceStereo_f* new_sssf_from_ssmf(SignalSourceMono_f* mono_signal) {
         return (SignalSourceStereo_f*)0;
     }
 
-    environment->source_signal = mono_signal;
+    environment->input_signal = mono_signal;
     stereo_signal->environment = environment;
     
     return stereo_signal;
