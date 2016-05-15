@@ -12,7 +12,7 @@
 //     at 2x the rate of the system. This must be avoided.
 
 SignalSourceMono_f *sine_signal_l, *sine_signal_r, *channel_l_gain, *channel_l_pan, *channel_r_gain, *channel_r_pan, *master_gain, *master_pan;
-SignalSourceStereo_f *sine_l_stereo_signal, *sine_r_stereo_signal;
+SignalSourceStereo_f *sine_l_stereo_signal, *sine_r_stereo_signal, *mixer_signal;
 StereoChannel_f *l_channel, *r_channel, *master_channel;
 SignalSourceStereo_i16 *i16_signal;
 StereoChannel_i16 *i16_channel;
