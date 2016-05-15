@@ -6,8 +6,7 @@ int ssmi16_pull_next_sample(SignalSourceMono_i16* signal, int16_t* sample) {
 
     return signal->generator(
                sample,
-               signal->param_count,
-               signal->param_signals
+               signal->environment
            );
 }
 
@@ -16,8 +15,7 @@ int sssi16_pull_next_sample(SignalSourceStereo_i16* signal, int16_t* l_sample, i
     return signal->generator(
                l_sample,
                r_sample,
-               signal->param_count,
-               signal->param_signals
+               signal->environment
            );
 }
 
@@ -25,8 +23,7 @@ int ssmf_pull_next_sample(SignalSourceMono_f* signal, float* sample) {
 
     return signal->generator(
                sample,
-               signal->param_count,
-               signal->param_signals
+               signal->environment
            ); 
 }
 
@@ -35,8 +32,7 @@ int sssf_pull_next_sample(SignalSourceStereo_f* signal, float* l_sample, float* 
     return signal->generator(
                l_sample,
                r_sample,
-               signal->param_count,
-               signal->param_signals
+               signal->environment
            );
 }
 

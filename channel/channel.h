@@ -67,7 +67,7 @@ typedef struct StereoChannel_i16 {
 int sci16_pull_next_sample(StereoChannel_i16* stereo_channel, int16_t* l_sample, int16_t* r_sample);
 int mci16_pull_next_sample(MonoChannel_i16* mono_channel, int16_t* sample);
 int sssi16_pull_next_sample(SignalSourceStereo_i16* signal, int16_t* l_sample, int16_t* r_sample);
-int ssmi16_pull_next_sample(SignalSourceMono_i16* signal, int16_t sample);
+int ssmi16_pull_next_sample(SignalSourceMono_i16* signal, int16_t* sample);
 
 //Signal and channel creation methods
 //StereoChannel_f* new_scf_from_sssf(SignalSourceStereo_f* signal, SignalSourceMono_f* pan_signal, SignalSourceMono_f* gain_signal);
