@@ -2,14 +2,17 @@
 #include "../config.h"
 #include <math.h>
 
+#ifndef M_PI
 #define M_PI 3.14159265358979323846264338327
+#endif
+
 #define DEG_TO_RAD(x) (((x)*M_PI)/180.0)
 
 typedef struct SineGeneratorEnv {
-    float current_phase, //Position along the t axis in degrees
-    float freq,          //Frequency of the generator
-    float duration,      //How long to generate the signal in ms
-    float time           //How long the signal has been running in ms
+    float current_phase; //Position along the t axis in degrees
+    float freq;          //Frequency of the generator
+    float duration;      //How long to generate the signal in ms
+    float time;           //How long the signal has been running in ms
 } SineGeneratorEnv;
 
 int sine_generator(float* sample, unsigned param_count, void* environment) {
