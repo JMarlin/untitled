@@ -17,7 +17,7 @@ typedef struct SineGeneratorEnv {
 
 int sine_generator(float* sample, unsigned param_count, void* environment) {
 
-    SineGeneratorEnvironment* vars = (SineGeneratorEnvironment*)environment;
+    SineGeneratorEnv* vars = (SineGeneratorEnv*)environment;
 
     float deg_per_sample = (360.0 * vars->freq)/SAMPLE_RATE;
 
