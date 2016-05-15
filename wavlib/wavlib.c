@@ -38,7 +38,7 @@ int write_wav_pcm16_stereo(char* file_name, StereoChannel_i16* stereo_channel) {
     
     //Write sub chunk 1, PCM format info
     fprintf(out_file, "fmt ");
-    fwrite((uint32_t []){16}, sizeof(uint32_t, 1, out_file); //PCM header is 16 bytes
+    fwrite((uint32_t []){16}, sizeof(uint32_t), 1, out_file); //PCM header is 16 bytes
     fwrite((uint16_t []){1}, sizeof(uint16_t), 1, out_file); //Audio Format 1, PCM
     fwrite((uint16_t []){2}, sizeof(uint16_t), 1, out_file); //2 channels
     fwrite((uint32_t []){44100}, sizeof(uint32_t), 1, out_file); //44.1khz sample rate
