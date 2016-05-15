@@ -116,6 +116,8 @@ int scf_pull_next_sample(StereoChannel_f* stereo_channel, float* l_sample, float
     l_sample[0] = l_sample[0] * l_gain;
     r_sample[0] = r_sample[0] * r_gain; 
 
+    //FIXME the below gain calculations aren't accurate to 
+    //how we want to actually model gain controls
     //Then apply gain to both samples 
     float gain = (1.0 + gain_sample)/2.0;
     l_sample[0] = l_sample[0] * gain;
@@ -252,3 +254,39 @@ SignalSourceStereo_i16* new_sssi16_from_scf(StereoChannel_f* stereo_channel_f) {
     return signal_i16;
 }
 
+StereoChannel_f*  new_scf(SignalSourceStereo_f* audio_signal, SignalSourceMono_f* pan_signal, SignalSourceMono_f* gain_signal) {
+    
+    StereoChannel_f* stereo_channel = (StereoChannel_f*)malloc(sizeof(StereoChannel_f));
+    
+    if(!stereo_channel)
+        return stereo_channel;
+        
+    stereo_channel->signal = audio_signal;
+    stereo_channel->pan_signal = pan_signal;
+    stereo_channel->gain_signal = gain_signal;
+    stereo_channel->last_pan = 0.0;
+    stereo_channel->last_gain = 0.0;
+    
+    return stereo_channel;
+}
+
+SignalSourceMono_f* new_const_signal_mf(float value) {
+    
+    SignalSourceMono_f* const_signal = new_ssmf(const_ssmf_generator);
+    
+    if(!const_signal)
+        return const_signal;
+    
+    ConstSsmfGeneratorEnv* environment = (ConstSsmfGeneratorEnv*)malloc(sizeof(ConstSsmfGeneratorEnv));
+    
+    if(!environment) {
+        
+        //delete_ssmf(const_signal)
+        return (SignalSourceMono_f*)0;
+    }
+    
+    environment->value = value;
+    const_signal->environment = environment;
+    
+    return const_signal;
+}
