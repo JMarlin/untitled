@@ -10,7 +10,7 @@ typedef struct SineGeneratorEnv {
     float freq,          //Frequency of the generator
     float duration,      //How long to generate the signal in ms
     float time           //How long the signal has been running in ms
-}
+} SineGeneratorEnv;
 
 int sine_generator(float* sample, unsigned param_count, void* environment) {
 

@@ -13,18 +13,18 @@ typedef int(*GeneratorFunctionStereo_f)(float*, float*, void*);
 typedef struct SignalSourceMono_f {
     GeneratorFunctionMono_f generator;
     void* environment;
-}
+} SignalSourceMono_f;
 
 typedef struct SignalSourceStereo_f {
     GeneratorFunctionStereo_f generator;
     void* environment;
-}
+} SignalSourceStereo_f;
 
 typedef struct MonoChannel_f {
     SignalSourceMono_f* signal;
     SignalSourceMono_f* gain_signal;
     float last_gain;
-}
+} MonoChannel_f;
 
 typedef struct StereoChannel_f {
     SignalSourceStereo_f signal;
@@ -32,7 +32,7 @@ typedef struct StereoChannel_f {
     SignalSourceMono_f* gain_signal;
     float last_pan;
     float last_gain;
-}
+} StereoChannel_f;
 
 int scf_pull_next_sample(StereoChannel_f* stereo_channel, float* l_sample, float* r_sample);
 int mcf_pull_next_sample(MonoChannel_f* mono_channel, float* sample);
@@ -49,20 +49,20 @@ typedef int(*GeneratorFunctionStereo_i16)(int16_t*, int16_t*, void*);
 typedef struct SignalSourceMono_i16 {
     GeneratorFunctionMono_i16 generator;
     void* environment;
-}
+} SignalSourceMono_i16;
 
 typedef struct SignalSourceStereo_i16 {
     GeneratorFunctionStereo_i16 generator;
     void* environment;
-}
+} SignalSourceStereo_i16;
 
 typedef struct MonoChannel_i16* {
     SignalSourceMono_i16* signal;
-}
+} MonoChannel_i16;
 
 typedef struct StereoChannel_i16 {
     SignalSourceStereo_i16* signal;
-} 
+} StereoChannel_i16;
 
 int sci16_pull_next_sample(StereoChannel_i16* stereo_channel, int16_t* l_sample, int16_t* r_sample);
 int mci16_pull_next_sample(MonoChannel_i16* mono_channel, int16_t* sample);

@@ -142,7 +142,7 @@ int scf_pull_next_sample(StereoChannel_f* stereo_channel, float* l_sample, float
 
 typedef struct SsmfToSssfGeneratorEnv {
     SignalSourceMono_f* input_signal;
-}
+} SsmfToSssfGeneratorEnv;
 
 int ssmf_to_sssf_generator(float* l_sample, float* r_sample, void* environment) {
 
@@ -160,7 +160,7 @@ int ssmf_to_sssf_generator(float* l_sample, float* r_sample, void* environment) 
 
 typedef struct ScfToSssi16GeneratorEnv {
     StereoChannel_f* input_channel;
-}
+} ScfToSssi16GeneratorEnv;
 
 int scf_to_sssi16_generator(int16_t* l_sample, int16_t* r_sample, void* environment) {
 
@@ -268,6 +268,19 @@ StereoChannel_f*  new_scf(SignalSourceStereo_f* audio_signal, SignalSourceMono_f
     stereo_channel->last_gain = 0.0;
     
     return stereo_channel;
+}
+
+typedef struct ConstSsmfGeneratorEnv {
+    float value;
+} ConstSsmfGeneratorEnv;
+
+int const_ssmf_generator(float* sample, void* environment) {
+    
+    ConstSsmfGeneratorEnv* vars = (ConstSsmfGeneratorEnv*)environment;
+    
+    sample[0] = vars->value;
+    
+    return 1;
 }
 
 SignalSourceMono_f* new_const_signal_mf(float value) {
