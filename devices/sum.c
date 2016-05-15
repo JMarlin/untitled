@@ -8,7 +8,7 @@ typedef struct SummerSFGeneratorEnv {
 
 int summer_sf_generator(float* l_sample, float* r_sample, void* environment) {
     
-    SummerSFGeneratorEnv* vars = (SummerSFGeneratorEnv)environment;
+    SummerSFGeneratorEnv* vars = (SummerSFGeneratorEnv*)environment;
     
     float temp_sample_l, temp_sample_r;
     int running = 0;
