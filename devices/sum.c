@@ -1,4 +1,5 @@
 #include "../channel/channel.h"
+#include <stdlib.h>
 
 typedef struct SummerSFGeneratorEnv {
     unsigned input_count;
@@ -11,11 +12,12 @@ int summer_sf_generator(float* l_sample, float* r_sample, void* environment) {
     
     float temp_sample_l, temp_sample_r;
     int running = 0;
+    int i;
     
     l_sample[0] = 0;
     r_sample[0] = 0;
     
-    for(var i = 0; i < vars->input_count; i++) {
+    for(i = 0; i < vars->input_count; i++) {
         
         if(vars->input[i]) {
             
@@ -31,6 +33,8 @@ int summer_sf_generator(float* l_sample, float* r_sample, void* environment) {
 }
 
 SignalSourceStereo_f* new_summer_sf(unsigned input_count) {
+    
+    int i;
     
     if(input_count == 0)
         return (SignalSourceStereo_f*)0;
@@ -59,7 +63,7 @@ SignalSourceStereo_f* new_summer_sf(unsigned input_count) {
     
     environment->input_count = input_count;
     
-    for(int i = 0; i < input_count; i++)
+    for(i = 0; i < input_count; i++)
         environment->input[i] = (StereoChannel_f*)0;
         
     out_signal->environment = environment;
@@ -68,7 +72,7 @@ SignalSourceStereo_f* new_summer_sf(unsigned input_count) {
 }
 
 //Note that this numbering is 1-based
-void summer_sf_assign_input(SignalSourceStereo_f summer, unsigned input_number, StereoChannel_f* source) {
+void summer_sf_assign_input(SignalSourceStereo_f* summer, unsigned input_number, StereoChannel_f* source) {
     
     if(!summer)
         return;
