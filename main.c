@@ -11,11 +11,11 @@
 //     this would cause, if the signal is connected to two inputs for example, for the source to be effectively sampled 
 //     at 2x the rate of the system. This must be avoided.
 
-SignalSourceMono_f* sine_signal_l, sine_signal_r, channel_l_gain, channel_l_pan, channel_r_gain, channel_r_pan, master_gain, master_pan;
-SignalSourceStereo_f* sine_l_stereo_signal, sine_r_stereo_signal;
-StereoChannel_f* l_channel, r_channel, master_channel;
-SignalSourceStereo_i16* i16_signal;
-StereoChannel_i16* i16_channel;
+SignalSourceMono_f *sine_signal_l, *sine_signal_r, *channel_l_gain, *channel_l_pan, *channel_r_gain, *channel_r_pan, *master_gain, *master_pan;
+SignalSourceStereo_f *sine_l_stereo_signal, *sine_r_stereo_signal;
+StereoChannel_f *l_channel, *r_channel, *master_channel;
+SignalSourceStereo_i16 *i16_signal;
+StereoChannel_i16 *i16_channel;
 
 void cleanup() {
     
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
     ATTEMPT(master_channel = new_scf(mixer_signal, master_pan, master_gain));
     
     //Convert the float channel into an i16 signal 
-    ATTEMPT(i16_signal = new_sssi16_from_scf(stereo_channel));
+    ATTEMPT(i16_signal = new_sssi16_from_scf(master_channel));
     
     //Wrap the i16 signal in an i16 channel
     ATTEMPT(i16_channel = new_sci16(i16_signal));
