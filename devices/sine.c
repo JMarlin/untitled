@@ -15,7 +15,7 @@ typedef struct SineGeneratorEnv {
     float time;           //How long the signal has been running in ms
 } SineGeneratorEnv;
 
-int sine_generator(float* sample, unsigned param_count, void* environment) {
+int sine_generator(float* sample, void* environment) {
 
     SineGeneratorEnv* vars = (SineGeneratorEnv*)environment;
 
@@ -23,7 +23,7 @@ int sine_generator(float* sample, unsigned param_count, void* environment) {
 
     vars->time += 1000.0/SAMPLE_RATE;
 
-    if(vars->time >= duration) 
+    if(vars->time >= vars->duration) 
         return 0;
 
     vars->current_phase += deg_per_sample;
