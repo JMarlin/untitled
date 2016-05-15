@@ -56,7 +56,7 @@ typedef struct SignalSourceStereo_i16 {
     void* environment;
 } SignalSourceStereo_i16;
 
-typedef struct MonoChannel_i16* {
+typedef struct MonoChannel_i16 {
     SignalSourceMono_i16* signal;
 } MonoChannel_i16;
 
