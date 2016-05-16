@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
     ATTEMPT(channel_l_pan = new_sine_test(5.0, 10000.0));
     ATTEMPT(channel_l_gain = new_const_signal_mf(0.0));
     ATTEMPT(channel_r_pan = new_const_signal_mf(1.0));
-    ATTEMPT(channel_r_gain = new_const_signal_mf(0.0));
+    ATTEMPT(channel_r_gain = new_const_signal_mf(1.0));
     
     //Create a channel for each signal 
     ATTEMPT(l_channel = new_scf(sine_l_stereo_signal, channel_l_pan, channel_l_gain));
@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
     
     //Create a final master stereo channel from the mixer output
     ATTEMPT(master_pan = new_const_signal_mf(0.0));
-    ATTEMPT(master_gain = new_const_signal_mf(0.0)); 
+    ATTEMPT(master_gain = new_const_signal_mf(1.0)); 
     ATTEMPT(master_channel = new_scf(mixer_signal, master_pan, master_gain));
     
     //Convert the float channel into an i16 signal 
