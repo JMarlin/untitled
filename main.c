@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
     ATTEMPT(sine_r_stereo_signal = new_sssf_from_ssmf(sine_signal_r));
     
     //Create the control signals for stereo channels 
-    ATTEMPT(channel_l_pan = new_const_signal_mf(-1.0));
+    ATTEMPT(channel_l_pan = new_sine_test(1.0, 5000.0));
     ATTEMPT(channel_l_gain = new_const_signal_mf(0.0));
     ATTEMPT(channel_r_pan = new_const_signal_mf(1.0));
     ATTEMPT(channel_r_gain = new_const_signal_mf(0.0));
