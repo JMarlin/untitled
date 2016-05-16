@@ -1,9 +1,0 @@
-#include "channel/channel.h"
-#include "devices/sine.h"
-#include "wavlib/wavlib.h"
-
-int main(int argc, char* argv[]) {
-
-    //Create a 450 sine signal lasting 2000ms
-    SignalSourceMono_f* sine_signal = new_sine_test(440.0, 2000.0);
-}
