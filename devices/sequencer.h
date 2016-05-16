@@ -17,7 +17,7 @@ typedef struct SequenceTimingNode {
     struct SequenceTimingNode* prev;
     struct SequenceTimingNode* next;
     SequenceMessage* message;
-} SequenceTiming;
+} SequenceTimingNode;
 
 typedef struct SequenceTimingList {
     float current_time;
