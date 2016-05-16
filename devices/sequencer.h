@@ -12,20 +12,16 @@ typedef struct SequenceMessage {
     uint8_t action;
 } SequenceMessage;
 
-typedef struct SequenceTiming {
+typedef struct SequenceTimingNode {
     float event_time;
+    struct SequenceTimingNode* prev;
+    struct SequenceTimingNode* next;
     SequenceMessage* message;
 } SequenceTiming;
 
-typedef struct SequenceTimingNode {
-    SequenceTiming* sequence_timing;
-    struct SequenceTimingNode* parent;
-    struct SequenceTimingNode* over;
-    struct SequenceTimingNode* under;
-} SequenceTimingNode;
-
 typedef struct SequenceTimingList {
     float current_time;
+    unsigned node_count;
     SequenceTimingNode* root_node;
 } SequenceTimingList;
 
@@ -40,7 +36,7 @@ typedef int(SequenceGeneratorFunction)(SequenceMessageCollection*, SequenceTimin
 
 typedef struct Sequencer {
     SequenceGeneratorFunction* generator;
-    SequenceTimingList* message_list;
+    SequenceTimingList* timing_list;
 } Sequencer;
 
 Sequencer* new_sequencer(void);
