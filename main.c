@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
     ATTEMPT(i16_channel = new_sci16(i16_signal));
     
     //Finally, stream the i16 channel out to WAV
-    write_wav_pcm16_stereo("sine_test.wav", i16_channel);
+    write_wav_pcm16_stereo("untitled.wav", i16_channel);
     
     return 0;
 }
