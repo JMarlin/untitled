@@ -3,6 +3,13 @@
 #include <inttypes.h>
 #include <stdlib.h>
 
+void delete_timing_node(SequenceTimingNode* timing_node) {
+
+    //We don't delete the message because it may have been handed to something else
+    
+    free(timing_node);
+}
+
 int standard_sequence_generator(SequenceMessageCollection* messages, SequenceTimingList* timing_list) {
 
     //Guard against null pointers
@@ -123,7 +130,7 @@ SequenceTimingNode* new_timing_node(float time, uint8_t note, uint8_t action) {
     new_node->event_time = time;
     new_node->message = new_sequence_message(note, action);
 
-    if(!new_node->sequence_timing->message) {
+    if(!new_node->message) {
 
         free(new_node);
         return (SequenceTimingNode*)0;
@@ -133,13 +140,6 @@ SequenceTimingNode* new_timing_node(float time, uint8_t note, uint8_t action) {
     new_node->next = (SequenceTimingNode*)0;
 
     return new_node;
-}
-
-void delete_timing_node(SequenceTimingNode* timing_node) {
-
-    //We don't delete the message because it may have been handed to something else
-    
-    free(timing_node);
 }
 
 void sequencer_add_event(Sequencer* sequencer, float time, uint8_t note, uint8_t action) {
