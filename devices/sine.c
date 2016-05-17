@@ -45,7 +45,7 @@ SignalSourceMono_f* new_fixed_sine(float freq, float duration) {
     if(!signal)
         return signal;
 
-    FixedSineGeneratorEnv* environment = (FixedSineGeneratorEnv*)malloc(sizeof(SineGeneratorEnv));
+    FixedSineGeneratorEnv* environment = (FixedSineGeneratorEnv*)malloc(sizeof(FixedSineGeneratorEnv));
 
     if(!environment) {
     
@@ -53,7 +53,7 @@ SignalSourceMono_f* new_fixed_sine(float freq, float duration) {
         return (SignalSourceMono_f*)0;
     }
 
-    environment->current_phase = 0;
+    environment->current_phase = 90.0;
     environment->freq = freq;
     environment->duration = duration;
     environment->time = 0;
@@ -75,7 +75,7 @@ int sine_vco_generator(float* sample, void* environment) {
     float cv_pitch_sample, cv_gate_sample;
 
     //If the control signal drops, we drop
-    if(!cv_pull_next_sample(&cv_pitch_sample, &cv_gate_sample, vars->control_voltage)) {
+    if(!cv_pull_next_sample(vars->control_voltage, &cv_pitch_sample, &cv_gate_sample)) {
         
         sample[0] = 0;
         return 0;
@@ -88,7 +88,7 @@ int sine_vco_generator(float* sample, void* environment) {
 
         if(!vars->last_state) {
 
-            vars->current_phase = 0;
+            vars->current_phase = 90.0;
             vars->last_state = 1;
         }
 
@@ -125,7 +125,7 @@ SignalSourceMono_f* new_sine_vco(ControlVoltage* control_voltage) {
         return (SignalSourceMono_f*)0;
     }
 
-    environment->current_phase = 0;
+    environment->current_phase = 90.0;
     environment->last_state = 0;
     environment->control_voltage = control_voltage;
     
