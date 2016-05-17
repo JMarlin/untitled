@@ -12,11 +12,18 @@ untitled.wav: untitled
 	./untitled
 
 untitled: build/main.o subdirs
-	cd build && $(CC) -o ../untitled *.o $(LIBS)
+	cd build && $(CC) -g -o ../untitled *.o $(LIBS)
 
 subdirs: 
 	-for d in $(SUBDIRS); do (cd $$d; $(MAKE) $(MFLAGS)); done
 
 build/main.o: main.c
-	$(CC) $(CFLAGS) -o build/main.o main.c
+	$(CC) $(CFLAGS) -g -o build/main.o main.c
+
+clean:
+	rm build/*.o
+	rm untitled
+	rm untitled.wav
+	rm untitled.mp3
+
 

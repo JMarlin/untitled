@@ -2,6 +2,7 @@
 #include "../config.h"
 #include <inttypes.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void delete_timing_node(SequenceTimingNode* timing_node) {
 
@@ -45,6 +46,7 @@ int standard_sequence_generator(SequenceMessageCollection* messages, SequenceTim
     //If the list count hit zero, we're done generating
     if(timing_list->node_count == 0) {
         
+        printf("Sequencer finished\n");
         messages->message_count = 0;
         return 0;
     }
@@ -54,12 +56,15 @@ int standard_sequence_generator(SequenceMessageCollection* messages, SequenceTim
     
     //Count the number of events in the list with times below or equal to the current
     //playback time 
-    for(count = 0; current_node && current_node->event_time <= timing_list->current_time; count++);
+    for(count = 0; current_node && current_node->event_time <= timing_list->current_time; count++)
+        current_node = current_node->next;
 
     messages->message_count = count;
 
     //Allocate a message array to recieve the consumed messages
     if(count) {
+
+        printf("Sequencer encountered an event at time %f\n", timing_list->current_time);
 
         messages->item = (SequenceMessage**)malloc(count * sizeof(SequenceMessage*));
         
@@ -70,23 +75,19 @@ int standard_sequence_generator(SequenceMessageCollection* messages, SequenceTim
             return 0;
         }
 
-        current_node = timing_list->root_node;
-    
         //Move the message references from the first [count] nodes into 
         //the allocated message array and drop those nodes from the list
         for(count = 0; count < messages->message_count; count++) {
         
-            messages->item[count] = current_node->message;
-            timing_list->root_node = current_node->next;
-
-            SequenceTimingNode* dead_node = current_node; 
-
-            current_node = current_node->next;
+            messages->item[count] = timing_list->root_node->message;
+            SequenceTimingNode* dead_node = timing_list->root_node; 
+            timing_list->root_node = timing_list->root_node->next;
             delete_timing_node(dead_node); 
         }
 
         //Make sure the root doesn't have a prev value
-        timing_list->root_node->prev = (SequenceTimingNode*)0;
+        if(timing_list->root_node)
+            timing_list->root_node->prev = (SequenceTimingNode*)0;
 
         //Update the number of items in the list
         timing_list->node_count -= count;

@@ -1,2 +1,2 @@
 CC=gcc
-CFLAGS=-c
+CFLAGS=-c -g

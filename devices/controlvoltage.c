@@ -3,6 +3,7 @@
 #include "sequencer.h"
 #include <inttypes.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct CvFromSequencerGeneratorEnv {
     Sequencer* sequencer;
@@ -23,21 +24,28 @@ int cv_from_sequencer_generator(float* pitch_sample, float* gate_sample, void* e
     //take the first event in the list and reject the rest
     for(i = 0; i < messages.message_count; i++) {
 
+        printf("CV generator got ");
+
         switch(messages.item[i]->action) {
         
             case SEQ_ACTON:
+                printf("a note-on");
                 vars->current_note = messages.item[i]->note;
                 vars->note_on = 1;
                 break;
 
             case SEQ_ACTOFF:
+                printf("a note-off");
                 if(vars->current_note == messages.item[i]->note)
                     vars->note_on = 0;
                 break;
 
             default:
+                printf("an unknown");
                 break;
         }
+
+        printf(" message\n");
 
         //Make sure we free the memory of the consumed
         //messages when we're finished with them
@@ -45,7 +53,8 @@ int cv_from_sequencer_generator(float* pitch_sample, float* gate_sample, void* e
     }
 
     //Free the consumed array of message pointers
-    free(messages.item);
+    if(messages.message_count)
+        free(messages.item);
 
     if(vars->note_on) {
 
