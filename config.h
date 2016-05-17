@@ -2,5 +2,6 @@
 #define CONFIG_H
 
 #define SAMPLE_RATE 44100.0
+#define MS_PER_SAMPLE (1000.0/SAMPLE_RATE)
 
 #endif //CONFIG_H

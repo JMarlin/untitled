@@ -1,5 +1,7 @@
 #include "sequencer.h"
+#include "../config.h"
 #include <inttypes.h>
+#include <stdlib.h>
 
 int standard_sequence_generator(SequenceMessageCollection* messages, SequenceTimingList* timing_list) {
 
@@ -27,7 +29,7 @@ int standard_sequence_generator(SequenceMessageCollection* messages, SequenceTim
     //playback time 
     for(count = 0; current_node && current_node->event_time <= timing_list->current_time; count++);
 
-    messages->count = count;
+    messages->message_count = count;
 
     //Allocate a message array to recieve the consumed messages
     if(count) {
@@ -64,6 +66,7 @@ int standard_sequence_generator(SequenceMessageCollection* messages, SequenceTim
     }
   
     //Messages consumed and passed along properly
+    timing_list->current_time += MS_PER_SAMPLE;
     return 1; 
 }
 
