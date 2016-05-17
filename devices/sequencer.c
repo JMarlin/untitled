@@ -10,6 +10,11 @@ void delete_timing_node(SequenceTimingNode* timing_node) {
     free(timing_node);
 }
 
+void delete_timing_list(SequenceTimingList* timing_list) {
+    
+    //TODO IMPLEMENT ME
+}
+
 int standard_sequence_generator(SequenceMessageCollection* messages, SequenceTimingList* timing_list) {
 
     //Guard against null pointers
