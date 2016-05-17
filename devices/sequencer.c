@@ -103,12 +103,25 @@ Sequencer* new_sequencer() {
     return sequencer;
 }
 
+SequenceMessage* new_sequence_message(uint8_t note, uint8_t action) {
+    
+    SequenceMessage* message = (SequenceMessage*)malloc(sizeof(SequenceMessage));
+    
+    if(!message)
+        return message;
+        
+    message->note = note;
+    message->action = action;
+    
+    return message;
+}
+
 SequenceTimingNode* new_timing_node(float time, uint8_t note, uint8_t action) {
 
     SequenceTimingNode* new_node = (SequenceTimingNode*)malloc(sizeof(SequenceTimingNode));
 
     new_node->event_time = time;
-    new_node->message = new_sequence_message(uint8_t note, uint8_t action);
+    new_node->message = new_sequence_message(note, action);
 
     if(!new_node->sequence_timing->message) {
 
