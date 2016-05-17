@@ -10,9 +10,24 @@ void delete_timing_node(SequenceTimingNode* timing_node) {
     free(timing_node);
 }
 
+void delete_timing_node_and_child(SequenceTimingNode* timing_node) {
+
+    free(timing_node->message);
+    delete_timing_node(timing_node);
+}
+
 void delete_timing_list(SequenceTimingList* timing_list) {
     
-    //TODO IMPLEMENT ME
+    SequenceTimingNode* temp_node;
+
+    while(timing_list->root_node) {
+    
+        temp_node = timing_list->root_node->next;
+        delete_timing_node_and_child(timing_list->root_node);
+        timing_list->root_node = temp_node;
+    }
+
+    free(timing_list);
 }
 
 int standard_sequence_generator(SequenceMessageCollection* messages, SequenceTimingList* timing_list) {
