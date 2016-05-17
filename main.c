@@ -1,6 +1,7 @@
 #include "channel/channel.h"
 #include "devices/sine.h"
 #include "devices/controlvoltage.h"
+#include "devices/sequencer.h"
 #include "wavlib/wavlib.h"
 #include "devices/sum.h"
 #include "config.h"

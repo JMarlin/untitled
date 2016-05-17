@@ -7,6 +7,26 @@
 #define SEQ_ACTON  0x01
 #define SEQ_ACTOFF 0x02
 
+//Sequencer notes
+#define NOTE_A1  0
+#define NOTE_AS1 1
+#define NOTE_BF1 1
+#define NOTE_B1  2
+#define NOTE_C2  3
+#define NOTE_CS2 4
+#define NOTE_DF2 4
+#define NOTE_D2  5
+#define NOTE_DS2 6
+#define NOTE_EF2 6
+#define NOTE_E2  7
+#define NOTE_F2  8
+#define NOTE_FS2 9
+#define NOTE_GF2 9
+#define NOTE_G2  10
+#define NOTE_GS2 11
+#define NOTE_AF2 11
+
+
 typedef struct SequenceMessage {
     uint8_t note;
     uint8_t action;
