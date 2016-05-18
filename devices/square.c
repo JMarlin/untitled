@@ -47,7 +47,7 @@ int square_vco_generator(float* sample, void* environment) {
         float freq = 55.0 * pow(2, 8.0*(1.0 + cv_pitch_sample)/2.0);
         float deg_per_sample = (360.0 * freq)/SAMPLE_RATE;
 
-        sample[0] = vars->current_phase >= 180.0 ? 1.0 : 0.0; 
+        sample[0] = vars->current_phase >= 180.0 ? 1.0 : -1.0; 
 
         vars->current_phase += deg_per_sample;
 
