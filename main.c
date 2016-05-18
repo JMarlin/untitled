@@ -75,15 +75,15 @@ int main(int argc, char* argv[]) {
 
     //Wrap the signals into stereo channels for mixing
     ATTEMPT(m_pan = new_const_signal_mf(0.0));
-    ATTEMPT(m_gain = new_const_signal_mf(1.0));
+    ATTEMPT(m_gain = new_const_signal_mf(0.0));
     ATTEMPT(m_channel = new_scf(m_sine_stereo_signal, m_pan, m_gain));
     ATTEMPT(b_pan = new_fixed_sine(3.5, 10000.0));
-    ATTEMPT(b_gain = new_const_signal_mf(1.0));
+    ATTEMPT(b_gain = new_const_signal_mf(0.0));
     ATTEMPT(b_channel = new_scf(b_sine_stereo_signal, b_pan, b_gain));
     
     //Create a summer to mix together the two instruments
     ATTEMPT(mixer = new_summer_sf(2));
-    //summer_sf_assign_input(mixer, 1, m_channel);
+    summer_sf_assign_input(mixer, 1, m_channel);
     summer_sf_assign_input(mixer, 2, b_channel);
 
     //Create a final master stereo channel from the mixer output
