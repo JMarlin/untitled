@@ -1,5 +1,6 @@
 #include "channel/channel.h"
 #include "devices/sine.h"
+#include "devices/square.h"
 #include "devices/controlvoltage.h"
 #include "devices/sequencer.h"
 #include "wavlib/wavlib.h"
@@ -66,7 +67,7 @@ int main(int argc, char* argv[]) {
     ATTEMPT(m_sine_signal = new_sine_vco(m_control));
     ATTEMPT(b_sequencer = new_sequencer());
     ATTEMPT(b_control = new_cv_from_sequencer(b_sequencer));
-    ATTEMPT(b_sine_signal = new_sine_vco(b_control));
+    ATTEMPT(b_sine_signal = new_square_vco(b_control));
     
     //convert the mono signal into a stereo signal 
     ATTEMPT(m_sine_stereo_signal = new_sssf_from_ssmf(m_sine_signal)); 

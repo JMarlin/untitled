@@ -1,6 +1,7 @@
 #include "../channel/channel.h"
 #include "../config.h"
 #include "controlvoltage.h"
+#include "sine.h"
 #include <math.h>
 #include <stdlib.h>
 
