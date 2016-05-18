@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
     
     //Create a summer to mix together the two instruments
     ATTEMPT(mixer = new_summer_sf(2));
-    summer_sf_assign_input(mixer, 1, m_channel);
+    //summer_sf_assign_input(mixer, 1, m_channel);
     summer_sf_assign_input(mixer, 2, b_channel);
 
     //Create a final master stereo channel from the mixer output
