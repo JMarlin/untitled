@@ -111,11 +111,11 @@ int main(int argc, char* argv[]) {
 
     sequencer_add_event(m_sequencer, t, NOTE_G4, SEQ_ACTOFF);
     
-    sequencer_add_event(b_sequencer, 0, NOTE_E3, SEQ_ACTON);
-    sequencer_add_event(b_sequencer, 2400, NOTE_C3, SEQ_ACTON);
-    sequencer_add_event(b_sequencer, 4800, NOTE_D3, SEQ_ACTON);
-    sequencer_add_event(b_sequencer, 7200, NOTE_A2, SEQ_ACTON);
-    sequencer_add_event(b_sequencer, 9600, NOTE_A2, SEQ_ACTOFF);
+    sequencer_add_event(b_sequencer, 0, NOTE_E2, SEQ_ACTON);
+    sequencer_add_event(b_sequencer, 2400, NOTE_C2, SEQ_ACTON);
+    sequencer_add_event(b_sequencer, 4800, NOTE_D2, SEQ_ACTON);
+    sequencer_add_event(b_sequencer, 7200, NOTE_A1, SEQ_ACTON);
+    sequencer_add_event(b_sequencer, 9600, NOTE_A1, SEQ_ACTOFF);
 
     //Finally, stream the i16 channel out to WAV
     write_wav_pcm16_stereo("untitled.wav", i16_channel);
