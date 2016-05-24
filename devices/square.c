@@ -2,6 +2,7 @@
 #include "../config.h"
 #include "controlvoltage.h"
 #include "square.h"
+#include "wavegenerator.h"
 #include <math.h>
 #include <stdlib.h>
 

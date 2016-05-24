@@ -18,7 +18,7 @@ ControlVoltage *m_control, *b_control;
 Sequencer *m_sequencer, *b_sequencer;
 SignalSourceMono_f *m_sine_signal, *b_sine_signal,
                    *m_gain, *m_pan, *b_gain, *b_pan,
-                   *master_gain, *master_pan;
+                   *master_gain, *master_pan, *pulse_duty;
 SignalSourceStereo_f *mixer, *m_sine_stereo_signal, *b_sine_stereo_signal;
 StereoChannel_f *m_channel, *b_channel, *master_channel;
 SignalSourceStereo_i16 *i16_signal;
@@ -67,7 +67,8 @@ int main(int argc, char* argv[]) {
     ATTEMPT(m_sine_signal = new_sine_vco(m_control));
     ATTEMPT(b_sequencer = new_sequencer());
     ATTEMPT(b_control = new_cv_from_sequencer(b_sequencer));
-    ATTEMPT(b_sine_signal = new_square_vco(b_control));
+    ATTEMPT(pulse_duty = new_fixed_sine(0.1, 10000.0));
+    ATTEMPT(b_sine_signal = new_pulse_vco(b_control, pulse_duty));
     
     //convert the mono signal into a stereo signal 
     ATTEMPT(m_sine_stereo_signal = new_sssf_from_ssmf(m_sine_signal)); 
