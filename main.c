@@ -3,6 +3,9 @@
 #include "devices/square.h"
 #include "devices/controlvoltage.h"
 #include "devices/sequencer.h"
+#include "devices/pulse.h"
+#include "devices/white.h"
+#include "devices/sofilter.h"
 #include "wavlib/wavlib.h"
 #include "devices/sum.h"
 #include "config.h"
@@ -18,7 +21,7 @@ ControlVoltage *m_control, *b_control;
 Sequencer *m_sequencer, *b_sequencer;
 SignalSourceMono_f *m_sine_signal, *b_sine_signal,
                    *m_gain, *m_pan, *b_gain, *b_pan,
-                   *master_gain, *master_pan, *pulse_duty;
+                   *master_gain, *master_pan, *pulse_duty, *biquad;
 SignalSourceStereo_f *mixer, *m_sine_stereo_signal, *b_sine_stereo_signal;
 StereoChannel_f *m_channel, *b_channel, *master_channel;
 SignalSourceStereo_i16 *i16_signal;
@@ -68,17 +71,19 @@ int main(int argc, char* argv[]) {
     ATTEMPT(b_sequencer = new_sequencer());
     ATTEMPT(b_control = new_cv_from_sequencer(b_sequencer));
     ATTEMPT(pulse_duty = new_fixed_sine(0.1, 10000.0));
-    ATTEMPT(b_sine_signal = new_pulse_vco(b_control, pulse_duty));
+    ATTEMPT(b_sine_signal = new_white_noise(10000.0)); //new_pulse_vco(b_control, pulse_duty));
+    //ATTEMPT(biquad = new_so_filter(b_sine_signal, 1.002827577112, -1.993508312736, 0.99149034878, -1.99350831273, 0.9943179258));
+    ATTEMPT(biquad = new_so_filter(b_sine_signal, 1.0069456698111126, -1.9059558206037222, 0.9790968644903498, -1.9059558206037222, 0.9860425343014625));
     
     //convert the mono signal into a stereo signal 
     ATTEMPT(m_sine_stereo_signal = new_sssf_from_ssmf(m_sine_signal)); 
-    ATTEMPT(b_sine_stereo_signal = new_sssf_from_ssmf(b_sine_signal));    
+    ATTEMPT(b_sine_stereo_signal = new_sssf_from_ssmf(biquad));    
 
     //Wrap the signals into stereo channels for mixing
     ATTEMPT(m_pan = new_const_signal_mf(0.0));
-    ATTEMPT(m_gain = new_const_signal_mf(0.0));
+    ATTEMPT(m_gain = new_const_signal_mf(-1.0));
     ATTEMPT(m_channel = new_scf(m_sine_stereo_signal, m_pan, m_gain));
-    ATTEMPT(b_pan = new_fixed_sine(10, 10000.0));
+    ATTEMPT(b_pan = new_const_signal_mf(0.0)); //new_fixed_sine(10, 10000.0));
     ATTEMPT(b_gain = new_const_signal_mf(0.0));
     ATTEMPT(b_channel = new_scf(b_sine_stereo_signal, b_pan, b_gain));
     
