@@ -93,7 +93,7 @@ int vco_wave_generator(float* sample, void* environment) {
             vars->last_state = 1;
         }
 
-        float freq = 55.0 * pow(2, 8.0*(1.0 + cv_pitch_sample)/2.0);
+        float freq = 55.0 * pow(2, 4.0*(1.0 + cv_pitch_sample));
         float deg_per_sample = (360.0 * freq)/SAMPLE_RATE;
 
         sample[0] = vars->wave_function(vars->current_phase, vars->wave_environment); 

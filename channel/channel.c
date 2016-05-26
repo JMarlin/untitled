@@ -1,4 +1,5 @@
 #include "channel.h"
+#include "../config.h"
 #include <inttypes.h>
 #include <stdlib.h>
 
@@ -268,18 +269,25 @@ StereoChannel_f*  new_scf(SignalSourceStereo_f* audio_signal, SignalSourceMono_f
 
 typedef struct ConstSsmfGeneratorEnv {
     float value;
+    float duration;
+    float time;
 } ConstSsmfGeneratorEnv;
 
 int const_ssmf_generator(float* sample, void* environment) {
     
     ConstSsmfGeneratorEnv* vars = (ConstSsmfGeneratorEnv*)environment;
-    
+
     sample[0] = vars->value;
     
-    return 1;
+    vars->time += MS_PER_SAMPLE;
+    
+    if(vars->time > vars->duration)
+        return 0;
+    else
+        return 1;
 }
 
-SignalSourceMono_f* new_const_signal_mf(float value) {
+SignalSourceMono_f* new_const_signal_mf(float value, float duration) {
     
     SignalSourceMono_f* const_signal = new_ssmf(const_ssmf_generator);
     
@@ -295,6 +303,8 @@ SignalSourceMono_f* new_const_signal_mf(float value) {
     }
     
     environment->value = value;
+    environment->duration = duration;
+    environment->time = 0;
     const_signal->environment = environment;
     
     return const_signal;

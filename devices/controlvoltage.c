@@ -1,6 +1,7 @@
 #include "controlvoltage.h"
 #include "../channel/channel.h"
 #include "sequencer.h"
+#include "split.h"
 #include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -131,6 +132,17 @@ ControlVoltage* new_cv_from_ssmf(SignalSourceMono_f* pitch_signal, SignalSourceM
     control_voltage->environment = environment;
 
     return control_voltage;
+}
+
+//NEEDS FAILURE CLEANUP HANDLING
+SignalSourceMono_f* cv_split_gate_signal(ControlVoltage* control_voltage) {
+
+    SignalSourceMono_f* original_signal = control_voltage->gate_signal;
+    SignalSourceMono_f* out_signal;
+
+    new_split(original_signal, &control_voltage->gate_signal, &out_signal);
+
+    return out_signal;
 }
 
 int cv_pull_next_sample(ControlVoltage* control_voltage, float* pitch_sample, float* gate_sample) {
