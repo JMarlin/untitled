@@ -134,17 +134,6 @@ ControlVoltage* new_cv_from_ssmf(SignalSourceMono_f* pitch_signal, SignalSourceM
     return control_voltage;
 }
 
-//NEEDS FAILURE CLEANUP HANDLING
-SignalSourceMono_f* cv_split_gate_signal(ControlVoltage* control_voltage) {
-
-    SignalSourceMono_f* original_signal = control_voltage->gate_signal;
-    SignalSourceMono_f* out_signal;
-
-    new_split(original_signal, &control_voltage->gate_signal, &out_signal);
-
-    return out_signal;
-}
-
 int cv_pull_next_sample(ControlVoltage* control_voltage, float* pitch_sample, float* gate_sample) {
 
     return control_voltage->generator(

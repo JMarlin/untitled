@@ -12,6 +12,7 @@
 #include "devices/adder.h"
 #include "devices/multiplier.h"
 #include "config.h"
+#include "instruments/envelope_sine.h"
 
 //Would be nice if we could just plug a tree of functions into other 
 //functions and then have the constructors fail gracefully if they
@@ -39,26 +40,29 @@
 
 int main(int argc, char* argv[]) {
     
-    write_wav_pcm16_stereo("untitled.wav", new_sci16(new_sssi16_from_scf(new_scf(
+    Sequencer* sequencer = new_sequencer();
+
+    StereoChannel_i16* i16_channel = new_sci16(new_sssi16_from_scf(new_scf(
         new_sssf_from_ssmf(
-            new_sine_vco(
-                new_cv_from_ssmf(
-                    new_frequency_to_cv(
-                        new_adder(
-                            new_const_signal_mf(500.0, 10000.0),
-                            new_multiplier(
-                                new_const_signal_mf(500, 10000.0),
-                                new_fixed_sine(450.0, 10000.0)
-                            )
-                        )
-                    ),
-                    new_const_signal_mf(1.0, 10000.0)
-                )
+            new_envelope_sine(
+                new_cv_from_sequencer(
+                    sequencer
+                ) 
             )
         ),
         new_const_signal_mf(0.0, 10000.0),
         new_const_signal_mf(0.0, 10000.0)
-    ))));
+    )));
+ 
+    int i;    
+
+    for(i = 0; i < 16; i++) {
+    
+        sequencer_add_event(sequencer, i*400, NOTE_C3, SEQ_ACTON);
+        sequencer_add_event(sequencer, (i*400)+200, NOTE_C3, SEQ_ACTOFF);
+    }
+
+    write_wav_pcm16_stereo("untitled.wav", i16_channel); 
    
     return 0;
 }

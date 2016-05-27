@@ -1,7 +1,7 @@
 include Makefile.inc
 
 LIBS=-lm
-SUBDIRS=devices wavlib channel
+SUBDIRS=devices wavlib channel instruments
 
 all: untitled.mp3
 
@@ -14,7 +14,7 @@ untitled.wav: untitled
 untitled: build/main.o subdirs
 	cd build && $(CC) -g -o ../untitled *.o $(LIBS)
 
-subdirs: 
+subdirs:
 	-for d in $(SUBDIRS); do (cd $$d; $(MAKE) $(MFLAGS)); done
 
 build/main.o: main.c
@@ -26,3 +26,11 @@ clean:
 	rm untitled.mp3
 
 
+
+
+
+
+
+
+
+ 

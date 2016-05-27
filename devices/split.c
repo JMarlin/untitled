@@ -1,32 +1,36 @@
-#ifndef SPLIT_H
-#define SPLIT_H
-
 #include "../channel/channel.h"
+#include "controlvoltage.h"
+#include <stdlib.h>
 
 typedef struct SplitGeneratorEnv {
     int free_count; //Used to make sure we don't delete the environment until both signals are freed
     int pull_count;
-    float sample_buffer;
+    float pitch_buffer;
+    float gate_buffer;
     float running_buffer;
-    SignalSourceMono_f* input_signal;
+    ControlVoltage* input_cv;
 } SplitGeneratorEnv;
 
-int split_generator(float* sample, void* environment) {
+int split_generator(float* pitch_sample, float* gate_sample, void* environment) {
 
     SplitGeneratorEnv* vars = (SplitGeneratorEnv*)environment;
     
-    if(pull_count) {
+    if(vars->pull_count) {
     
-        sample[0] = vars->sample_buffer;
+        pitch_sample[0] = vars->pitch_buffer;
+        gate_sample[0] = vars->gate_buffer;
         vars->pull_count = 0;
         return vars->running_buffer;
     } else {
 
         vars->running_buffer = 
-            ssmf_pull_next_sample(vars->input_signal, sample);
+            cv_pull_next_sample(vars->input_cv, pitch_sample, gate_sample);
         
-        vars->sample_buffer = sample[0];
+        vars->pitch_buffer = pitch_sample[0];
+        vars->gate_buffer = gate_sample[0];
         
+        vars->pull_count++;
+
         return vars->running_buffer;
     }
 }
@@ -37,7 +41,7 @@ int split_generator(float* sample, void* environment) {
 //been freed
 int split_deleter(void* environment) {
  
-    SplitGeneratorEnv vars = (SplitGeneratorEnv*)environment;
+    SplitGeneratorEnv* vars = (SplitGeneratorEnv*)environment;
    
     if(vars->free_count != 1) {
     
@@ -49,10 +53,10 @@ int split_deleter(void* environment) {
     return 1;
 }
 
-int new_split(SignalSourceMono_f* input_signal, SignalSourceMono_f** out_signal_a, SignalSourceMono_f** out_signal_b) {
+int new_split(ControlVoltage* input_cv, ControlVoltage** out_cv_a, ControlVoltage** out_cv_b) {
 
-    out_signal_a[0] = (SignalSourceMono_f*)0;
-    out_signal_b[0] = (SignalSourceMono_f*)0;
+    out_cv_a[0] = (ControlVoltage*)0;
+    out_cv_b[0] = (ControlVoltage*)0;
      
     //The critical component of the splitter is that both result signals get the same environment
     SplitGeneratorEnv* environment = (SplitGeneratorEnv*)malloc(sizeof(SplitGeneratorEnv));
@@ -62,29 +66,33 @@ int new_split(SignalSourceMono_f* input_signal, SignalSourceMono_f** out_signal_
 
     environment->free_count = 1; //We use this in case we need to bail early
     environment->pull_count = 0;
-    environment->sample_buffer = 0;
+    environment->pitch_buffer = 0;
+    environment->gate_buffer = 0;
     environment->running_buffer = 0;
-    environment->input_signal = input_signal;
+    environment->input_cv = input_cv;
 
-    out_signal_a[0] = new_ssmf(split_generator); //split_deleter, environment);
+    out_cv_a[0] = (ControlVoltage*)malloc(sizeof(ControlVoltage));
     
-    if(!out_signal_a[0]) 
+    if(!out_cv_a[0]) 
         return;
 
-    out_signal_b[0] = new_ssmf(split_generator); //split_deleter, environment);
+    out_cv_a[0]->generator = split_generator;
 
-    if(!out_signal_b[0]) {
+    out_cv_b[0] = (ControlVoltage*)malloc(sizeof(ControlVoltage));   
 
-        free(out_signal_a[0]);
-        out_signal_a[0] = (SignalSourceMono_f*)0;
+    if(!out_cv_b[0]) {
+
+        free(out_cv_a[0]);
+        out_cv_a[0] = (ControlVoltage*)0;
         return;
     }
 
+    out_cv_b[0]->generator = split_generator;
+
     environment->free_count = 0; //Normal operation
-    out_signal_a[0]->environment = environment;
-    out_signal_b[0]->environment = environment;
+    out_cv_a[0]->environment = environment;
+    out_cv_b[0]->environment = environment;
 
     return; 
 }
 
-#endif SPLIT_H

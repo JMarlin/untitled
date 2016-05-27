@@ -2,7 +2,8 @@
 #define SPLIT_H
 
 #include "../channel/channel.h"
+#include "controlvoltage.h"
 
-void new_split(SignalSourceMono_f* input_signal, SignalSourceMono_f** out_signal_a, SignalSourceMono_f** out_signal_b);
+void new_split(ControlVoltage* input_cv, ControlVoltage** out_cv_a, ControlVoltage** out_cv_b);
 
-#endif SPLIT_H
+#endif //SPLIT_H

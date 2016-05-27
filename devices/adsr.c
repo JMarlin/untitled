@@ -1,14 +1,17 @@
 #include "../channel/channel.h"
+#include "../config.h"
 #include "adsr.h"
+#include <stdlib.h>
+#include "controlvoltage.h"
 //#include "vco.h"
 
 typedef struct ADSRGeneratorEnv {
-    SignalSourceMono_f* gate_signal;
+    ControlVoltage* control_voltage;
     SignalSourceMono_f* input_signal;
     SignalSourceMono_f* a_signal;
     SignalSourceMono_f* d_signal;
     SignalSourceMono_f* s_signal;
-    SignalSourceMOno_f* r_signal;
+    SignalSourceMono_f* r_signal;
     float time;
     float last_gate;
 } ADSRGeneratorEnv;
@@ -29,10 +32,10 @@ int adsr_generator(float* sample, void* environment) {
     ADSRGeneratorEnv* vars = (ADSRGeneratorEnv*)environment;
 
     float current_gain;
-    float gate_sample,  input_sample,  a_sample,  d_sample,  s_sample,  r_sample;
-    int   gate_running, input_running, a_running, d_running, s_running, r_running;
+    float pitch_sample, gate_sample,  input_sample,  a_sample,  d_sample,  s_sample,  r_sample;
+    int   cv_running, input_running, a_running, d_running, s_running, r_running;
     
-    gate_running  = ssmf_pull_next_sample(vars->gate_signal,  &gate_sample);
+    cv_running  = cv_pull_next_sample(vars->control_voltage,  &pitch_sample, &gate_sample);
     input_running = ssmf_pull_next_sample(vars->input_signal, &input_sample);
     a_running     = ssmf_pull_next_sample(vars->a_signal,     &a_sample);
     d_running     = ssmf_pull_next_sample(vars->d_signal,     &d_sample);
@@ -40,7 +43,7 @@ int adsr_generator(float* sample, void* environment) {
     r_running     = ssmf_pull_next_sample(vars->r_signal,     &r_sample);
 
     //Exit early if any of our input signals exited
-    if(!(gate_running && input_running && a_running && d_running && s_running && r_running))
+    if(!(cv_running && input_running && a_running && d_running && s_running && r_running))
         return 0;
 
     if(gate_sample > -1.0) {
@@ -88,7 +91,7 @@ int adsr_generator(float* sample, void* environment) {
     return 1;
 }
 
-SignalSourceMono_f* new_adsr(SignalSourceMono_f* input_signal, SignalSourceMono_f* gate_signal, SignalSourceMono_f* a_signal, SignalSourceMono_f* d_signal, SignalSourceMono_f* s_signal, SignalSourceMono_f* r_signal) {
+SignalSourceMono_f* new_adsr(SignalSourceMono_f* input_signal, ControlVoltage* control_voltage, SignalSourceMono_f* a_signal, SignalSourceMono_f* d_signal, SignalSourceMono_f* s_signal, SignalSourceMono_f* r_signal) {
 
     ADSRGeneratorEnv* environment = (ADSRGeneratorEnv*)malloc(sizeof(ADSRGeneratorEnv*));
 
@@ -96,7 +99,7 @@ SignalSourceMono_f* new_adsr(SignalSourceMono_f* input_signal, SignalSourceMono_
         return (SignalSourceMono_f*)0;
 
     environment->input_signal = input_signal;
-    environment->gate_signal = gate_signal;
+    environment->control_voltage = control_voltage;
     environment->a_signal = a_signal;
     environment->d_signal = d_signal;
     environment->s_signal = s_signal;
@@ -118,4 +121,3 @@ SignalSourceMono_f* new_adsr(SignalSourceMono_f* input_signal, SignalSourceMono_
     return out_signal;
 }
 
-#endif //ADSR_H
