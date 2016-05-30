@@ -21,7 +21,7 @@ function use the callback to delete the environment as a free bonus in the
 case that signal creation fails.
 */
 
-typedef struct FreqToCVGeneratorEnv {
+typedef struct FreqToCVGeneratorEnv_s {
     SignalSourceMono_f* signal;
 } FreqToCVGeneratorEnv;
 

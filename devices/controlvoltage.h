@@ -7,7 +7,7 @@
 
 typedef int(*ControlVoltageGeneratorFunction)(float*, float*, void*);
 
-typedef struct ControlVoltage {
+typedef struct ControlVoltage_s {
     ControlVoltageGeneratorFunction generator;
     void* environment;
 } ControlVoltage;

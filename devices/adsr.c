@@ -5,7 +5,7 @@
 #include "controlvoltage.h"
 //#include "vco.h"
 
-typedef struct ADSRGeneratorEnv {
+typedef struct ADSRGeneratorEnv_s {
     ControlVoltage* control_voltage;
     SignalSourceMono_f* input_signal;
     SignalSourceMono_f* a_signal;

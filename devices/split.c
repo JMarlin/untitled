@@ -2,7 +2,7 @@
 #include "controlvoltage.h"
 #include <stdlib.h>
 
-typedef struct SplitGeneratorEnv {
+typedef struct SplitGeneratorEnv_s {
     int free_count; //Used to make sure we don't delete the environment until both signals are freed
     int pull_count;
     float pitch_buffer;

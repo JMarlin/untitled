@@ -3,7 +3,7 @@
 #include "sofilter.h"
 #include <stdlib.h>
 
-typedef struct SOFilterGeneratorEnv {
+typedef struct SOFilterGeneratorEnv_s {
     float b0;
     float b1;
     float b2;

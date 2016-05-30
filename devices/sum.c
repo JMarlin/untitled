@@ -1,7 +1,7 @@
 #include "../channel/channel.h"
 #include <stdlib.h>
 
-typedef struct SummerSFGeneratorEnv {
+typedef struct SummerSFGeneratorEnv_s {
     unsigned input_count;
     StereoChannel_f** input;
 } SummerSFGeneratorEnv;

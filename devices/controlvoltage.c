@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct CvFromSequencerGeneratorEnv {
+typedef struct CvFromSequencerGeneratorEnv_s {
     Sequencer* sequencer;
     unsigned note_on;
     uint8_t current_note;
@@ -96,7 +96,7 @@ ControlVoltage* new_cv_from_sequencer(Sequencer* sequencer) {
     return control_voltage;
 }
 
-typedef struct CvFromSsmfGeneratorEnv {
+typedef struct CvFromSsmfGeneratorEnv_s {
     SignalSourceMono_f* pitch_signal;
     SignalSourceMono_f* gate_signal;
 } CvFromSsmfGeneratorEnv;

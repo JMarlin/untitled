@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-typedef struct FixedWaveGeneratorEnv {
+typedef struct FixedWaveGeneratorEnv_s {
     float current_phase; //Position along the t axis in degrees
     float freq;          //Frequency of the generator
     float duration;      //How long to generate the signal in ms

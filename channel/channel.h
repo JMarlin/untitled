@@ -4,23 +4,23 @@
 #include <inttypes.h>
 
 //floating-point channels
-typedef struct SignalSourceMono_f SignalSourceMono_f;
-typedef struct SignalSourceStereo_f SignalSourceStereo_f;
+//typedef struct SignalSourceMono_f_s SignalSourceMono_f;
+//typedef struct SignalSourceStereo_f_s SignalSourceStereo_f;
 
 typedef int(*GeneratorFunctionMono_f)(float*, void*);
 typedef int(*GeneratorFunctionStereo_f)(float*, float*, void*);
 
-typedef struct SignalSourceMono_f {
+typedef struct SignalSourceMono_f_s {
     GeneratorFunctionMono_f generator;
     void* environment;
 } SignalSourceMono_f;
 
-typedef struct SignalSourceStereo_f {
+typedef struct SignalSourceStereo_f_s {
     GeneratorFunctionStereo_f generator;
     void* environment;
 } SignalSourceStereo_f;
 
-typedef struct MonoChannel_f {
+typedef struct MonoChannel_f_s {
     SignalSourceMono_f* signal;
     SignalSourceMono_f* gain_signal;
     float last_gain;
@@ -40,27 +40,27 @@ int sssf_pull_next_sample(SignalSourceStereo_f* signal, float* l_sample, float* 
 int ssmf_pull_next_sample(SignalSourceMono_f* signal, float* sample);
 
 //16-bit signed int channels
-typedef struct SignalSourceMono_i16 SignalSourceMono_i16;
-typedef struct SignalSourceStereo_i16 SignalSourceStereo_i16;
+//typedef struct SignalSourceMono_i16 SignalSourceMono_i16;
+//typedef struct SignalSourceStereo_i16 SignalSourceStereo_i16;
 
 typedef int(*GeneratorFunctionMono_i16)(int16_t*, void*);
 typedef int(*GeneratorFunctionStereo_i16)(int16_t*, int16_t*, void*);
 
-typedef struct SignalSourceMono_i16 {
+typedef struct SignalSourceMono_i16_s {
     GeneratorFunctionMono_i16 generator;
     void* environment;
 } SignalSourceMono_i16;
 
-typedef struct SignalSourceStereo_i16 {
+typedef struct SignalSourceStereo_i16_s {
     GeneratorFunctionStereo_i16 generator;
     void* environment;
 } SignalSourceStereo_i16;
 
-typedef struct MonoChannel_i16 {
+typedef struct MonoChannel_i16_s {
     SignalSourceMono_i16* signal;
 } MonoChannel_i16;
 
-typedef struct StereoChannel_i16 {
+typedef struct StereoChannel_i16_s {
     SignalSourceStereo_i16* signal;
 } StereoChannel_i16;
 

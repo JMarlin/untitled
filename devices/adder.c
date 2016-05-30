@@ -21,7 +21,7 @@ function use the callback to delete the environment as a free bonus in the
 case that signal creation fails.
 */
 
-typedef struct AdderGeneratorEnv {
+typedef struct AdderGeneratorEnv_s {
     SignalSourceMono_f* signal_a;
     SignalSourceMono_f* signal_b;
 } AdderGeneratorEnv;

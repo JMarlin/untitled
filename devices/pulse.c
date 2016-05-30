@@ -6,7 +6,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-typedef struct PulseVcoEnvironment {
+typedef struct PulseVcoEnvironment_s {
     SignalSourceMono_f* duty_signal;
 } PulseVcoEnvironment;
 

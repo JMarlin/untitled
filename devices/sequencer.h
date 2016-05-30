@@ -129,25 +129,25 @@
 #define NOTE_AF8 83
 
 
-typedef struct SequenceMessage {
+typedef struct SequenceMessage_s {
     uint8_t note;
     uint8_t action;
 } SequenceMessage;
 
-typedef struct SequenceTimingNode {
+typedef struct SequenceTimingNode_s{
     float event_time;
-    struct SequenceTimingNode* prev;
-    struct SequenceTimingNode* next;
+    struct SequenceTimingNode_s* prev;
+    struct SequenceTimingNode_s* next;
     SequenceMessage* message;
 } SequenceTimingNode;
 
-typedef struct SequenceTimingList {
+typedef struct SequenceTimingList_s {
     float current_time;
     unsigned node_count;
     SequenceTimingNode* root_node;
 } SequenceTimingList;
 
-typedef struct SequenceMessageCollection {
+typedef struct SequenceMessageCollection_s {
     unsigned message_count;
     SequenceMessage** item;
 } SequenceMessageCollection;
