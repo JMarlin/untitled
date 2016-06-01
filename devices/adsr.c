@@ -49,16 +49,19 @@ int adsr_generator(float* sample, void* environment) {
     if(gate_sample > -1.0) {
 
         //Check to see if we just turned on
-        if(!(vars->last_gate > -1.0))
+        if(!(vars->last_gate > -1.0)) {
+
             vars->time = 0;
+            printf("Note started (%f, %f, %f, %f)\n", a_sample, d_sample, s_sample, r_sample);
+        }
 
         if(vars->time <= a_sample) {
 
-            current_gain = ((2*vars->time)/a_sample) - 1;
+            current_gain = (powf(vars->time/1000, 2) * 2) - 1;
             vars->time += MS_PER_SAMPLE;
         } else if(vars->time <= (a_sample + d_sample))  {
 
-            current_gain = (((s_sample - 1)*(vars->time - a_sample))/d_sample) + 1;
+            current_gain = ((((powf(((2*(a_sample+(d_sample/2)) - vars->time) - a_sample)/d_sample, 2) * ((1 - s_sample) / 2)) + (1 - ((1 - s_sample) / 2))) * 2) - 1;
             vars->time += MS_PER_SAMPLE;
         } else {
 
@@ -70,8 +73,11 @@ int adsr_generator(float* sample, void* environment) {
     } else {
   
         //Check to see if we just turned off
-        if(vars->last_gate > -1.0)
+        if(vars->last_gate > -1.0) {
+
             vars->time = 0;
+            printf("Note ended\n");
+        }
 
         if(vars->time <= r_sample) {
         
@@ -93,7 +99,7 @@ int adsr_generator(float* sample, void* environment) {
 
 SignalSourceMono_f* new_adsr(SignalSourceMono_f* input_signal, ControlVoltage* control_voltage, SignalSourceMono_f* a_signal, SignalSourceMono_f* d_signal, SignalSourceMono_f* s_signal, SignalSourceMono_f* r_signal) {
 
-    ADSRGeneratorEnv* environment = (ADSRGeneratorEnv*)malloc(sizeof(ADSRGeneratorEnv*));
+    ADSRGeneratorEnv* environment = (ADSRGeneratorEnv*)malloc(sizeof(ADSRGeneratorEnv));
 
     if(!environment)
         return (SignalSourceMono_f*)0;
@@ -104,6 +110,7 @@ SignalSourceMono_f* new_adsr(SignalSourceMono_f* input_signal, ControlVoltage* c
     environment->d_signal = d_signal;
     environment->s_signal = s_signal;
     environment->r_signal = r_signal;
+    environment->last_gate = -1.0; 
     environment->time = 0;
 
     SignalSourceMono_f* out_signal = new_ssmf(adsr_generator); //adsr_deleter, environment);

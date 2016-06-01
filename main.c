@@ -56,10 +56,10 @@ int main(int argc, char* argv[]) {
  
     int i;    
 
-    for(i = 0; i < 16; i++) {
+    for(i = 0; i < 2; i++) {
     
-        sequencer_add_event(sequencer, i*400, NOTE_C3, SEQ_ACTON);
-        sequencer_add_event(sequencer, (i*400)+200, NOTE_C3, SEQ_ACTOFF);
+        sequencer_add_event(sequencer, i*5000.0, NOTE_C3, SEQ_ACTON);
+        sequencer_add_event(sequencer, (i*5000.0)+3000.0, NOTE_C3, SEQ_ACTOFF);
     }
 
     write_wav_pcm16_stereo("untitled.wav", i16_channel); 

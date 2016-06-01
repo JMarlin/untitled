@@ -85,28 +85,15 @@ int vco_wave_generator(float* sample, void* environment) {
     //Control voltages assume a volt-to-hertz scheme covering eight
     //octaves from A0 to A8  mapped over -1.0 to 1.0
     //(eg: -1.0 = 55hz, 0.0 = 880hz, 1.0 = 14080hz)
-    if(cv_gate_sample > -1.0) { 
+    float freq = 55.0 * pow(2, 4.0*(1.0 + cv_pitch_sample));
+    float deg_per_sample = (360.0 * freq)/SAMPLE_RATE;
 
-        if(!vars->last_state) {
+    sample[0] = vars->wave_function(vars->current_phase, vars->wave_environment); 
 
-            vars->current_phase = 90.0;
-            vars->last_state = 1;
-        }
+    vars->current_phase += deg_per_sample;
 
-        float freq = 55.0 * pow(2, 4.0*(1.0 + cv_pitch_sample));
-        float deg_per_sample = (360.0 * freq)/SAMPLE_RATE;
-
-        sample[0] = vars->wave_function(vars->current_phase, vars->wave_environment); 
-
-        vars->current_phase += deg_per_sample;
-
-        if(vars->current_phase >= 360.0)
-            vars->current_phase -= 360.0;
-    } else {
-   
-        sample[0] = 0;
-        vars->last_state = 0;
-    }
+    if(vars->current_phase >= 360.0)
+        vars->current_phase -= 360.0;
 
     return 1;
 }
