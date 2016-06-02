@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
 
     StereoChannel_i16* i16_channel = new_sci16(new_sssi16_from_scf(new_scf(
         new_sssf_from_ssmf(
-            new_envelope_sine(
+            new_envelope_white(
                 new_cv_from_sequencer(
                     sequencer
                 ) 
@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     for(i = 0; i < 16; i++) {
     
         sequencer_add_event(sequencer, i*1000.0, NOTE_C3, SEQ_ACTON);
-        sequencer_add_event(sequencer, (i*1000.0)+400.0, NOTE_C3, SEQ_ACTOFF);
+        sequencer_add_event(sequencer, (i*1000.0)+40.0, NOTE_C3, SEQ_ACTOFF);
     }
 
     sequencer_add_event(sequencer, 10000.0, NOTE_C3, SEQ_ACTEND);
