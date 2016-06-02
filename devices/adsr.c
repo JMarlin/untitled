@@ -2,6 +2,8 @@
 #include "../config.h"
 #include "adsr.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
 #include "controlvoltage.h"
 //#include "vco.h"
 
@@ -61,7 +63,7 @@ int adsr_generator(float* sample, void* environment) {
             vars->time += MS_PER_SAMPLE;
         } else if(vars->time <= (a_sample + d_sample))  {
 
-            current_gain = ((((powf(((2*(a_sample+(d_sample/2)) - vars->time) - a_sample)/d_sample, 2) * ((1 - s_sample) / 2)) + (1 - ((1 - s_sample) / 2))) * 2) - 1;
+            current_gain = (((powf((((2*(a_sample+(d_sample/2))) - vars->time) - a_sample)/d_sample, 2) * ((1 - s_sample) / 2)) + (1 - ((1 - s_sample) / 2))) * 2) - 1;
             vars->time += MS_PER_SAMPLE;
         } else {
 
@@ -81,7 +83,7 @@ int adsr_generator(float* sample, void* environment) {
 
         if(vars->time <= r_sample) {
         
-            current_gain = (((-1.0 - s_sample) * vars->time)/r_sample)+s_sample;
+            current_gain = ((pow(((2 * (r_sample / 2)) - vars->time) / r_sample, 2) * (1 - ((1 - s_sample) / 2))) * 2) - 1;
             vars->time += MS_PER_SAMPLE;
         } else {
         

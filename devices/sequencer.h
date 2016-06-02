@@ -6,6 +6,7 @@
 //Sequencer actions
 #define SEQ_ACTON  0x01
 #define SEQ_ACTOFF 0x02
+#define SEQ_ACTEND 0x00
 
 //Sequencer notes
 #define NOTE_A1  0

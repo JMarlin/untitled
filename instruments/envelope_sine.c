@@ -12,9 +12,9 @@ SignalSourceMono_f* new_envelope_sine(ControlVoltage* control_voltage) {
     return new_adsr(
         new_sine_vco(cv_copy_1),
         cv_copy_2,
-        new_const_signal_mf(1000.0, 10000),
-        new_const_signal_mf(1000.0, 10000),
-        new_const_signal_mf(0.25, 10000),
-        new_const_signal_mf(2000.0, 10000)
+        new_const_signal_mf(200.0, 10000),
+        new_const_signal_mf(50.0, 10000),
+        new_const_signal_mf(-0.50, 10000),
+        new_const_signal_mf(200.0, 10000)
     );
 }
