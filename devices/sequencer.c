@@ -46,7 +46,7 @@ int standard_sequence_generator(SequenceMessageCollection* messages, SequenceTim
     //If the list count hit zero, we're done generating
     if(timing_list->node_count == 0) {
         
-        printf("Sequencer finished\n");
+        //printf("Sequencer finished\n");
         messages->message_count = 0;
         return 0;
     }

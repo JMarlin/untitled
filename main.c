@@ -13,8 +13,10 @@
 #include "devices/adder.h"
 #include "devices/multiplier.h"
 #include "devices/delay.h"
+#include "instruments/kick.h"
 #include "config.h"
 #include "instruments/envelope_white.h"
+#include "instruments/envelope_sine.h"
 
 //Would be nice if we could just plug a tree of functions into other 
 //functions and then have the constructors fail gracefully if they
@@ -43,46 +45,51 @@
 int main(int argc, char* argv[]) {
     
     Sequencer* snare_sequencer = new_sequencer();
-    
+    Sequencer* kick_sequencer = new_sequencer(); 
+    Sequencer* bass_sequencer = new_sequencer();
+
     StereoChannel_f* bass_channel = new_scf(
         new_sssf_from_ssmf(
-            new_vca(
-                new_fixed_sine(110, 10000.0),
-                new_adder(
-                    new_const_signal_mf(0.25, 10000.0),
-                    new_multiplier(
-                        new_const_signal_mf(0.875, 10000.0),
-                        new_fixed_sine(53, 10000.0)
-                    )
-                )
-            )
+            new_sine_vco(new_cv_from_sequencer(bass_sequencer))
         ),
         new_const_signal_mf(0.0, 10000.0),
-        new_const_signal_mf(0.4, 10000.0)
+        new_const_signal_mf(1.0, 10000.0)
     );
-    
+  
+    StereoChannel_f* kick_channel = new_scf(
+        new_sssf_from_ssmf(
+            new_kick(new_cv_from_sequencer(kick_sequencer))
+        ),
+        new_const_signal_mf(0.0, 10000.0),
+        new_const_signal_mf(1.0, 10000.0)
+    );
+  
+
     StereoChannel_f* snare_channel = new_scf(
         new_sssf_from_ssmf(
-            new_delay(
+            //new_delay(
                 new_envelope_white(
                     new_cv_from_sequencer(snare_sequencer)
-                ),
-                new_multiplier(
-                    new_fixed_sine(0.4, 10000.0),
-                    new_const_signal_mf(0.3, 10000.0)
-                ),
-                new_const_signal_mf(0.7, 10000.0),
-                new_const_signal_mf(0.0, 10000.0),
-                500.0
-            )
+                )//,
+                //new_const_signal_mf(-1.0, 10000.0),
+                //new_multiplier(
+                //    new_fixed_sine(0.4, 10000.0),
+                //    new_const_signal_mf(0.3, 10000.0)
+                //),
+                //new_const_signal_mf(0.7, 10000.0),
+                //new_const_signal_mf(1.0, 10000.0),
+                //500.0
+            //)
         ),
         new_const_signal_mf(0.0, 10000.0),
         new_const_signal_mf(1.0, 10000.0)
     );
 
-    SignalSourceStereo_f* master_summer = new_summer_sf(2);
-    summer_sf_assign_input(master_summer, 1, bass_channel);
-    summer_sf_assign_input(master_summer, 2, snare_channel);
+
+    SignalSourceStereo_f* master_summer = new_summer_sf(3);
+    //summer_sf_assign_input(master_summer, 1, kick_channel);
+    //summer_sf_assign_input(master_summer, 2, snare_channel);
+    summer_sf_assign_input(master_summer, 3, bass_channel);
 
     StereoChannel_i16* i16_channel = new_sci16(
         new_sssi16_from_scf(
@@ -97,9 +104,19 @@ int main(int argc, char* argv[]) {
     int i;    
 
     for(i = 0; i < 16; i++) {
+        
+        sequencer_add_event(bass_sequencer, i*1000, NOTE_C2, SEQ_ACTON);
+        sequencer_add_event(bass_sequencer, (i*1000)+400, NOTE_C2, SEQ_ACTOFF); 
+    }
+
+    for(i = 0; i < 8; i++) {
     
-        sequencer_add_event(snare_sequencer, i*1000.0, NOTE_C3, SEQ_ACTON);
-        sequencer_add_event(snare_sequencer, (i*1000.0)+40.0, NOTE_C3, SEQ_ACTOFF);
+        sequencer_add_event(kick_sequencer, (i*2000.0), NOTE_C3, SEQ_ACTON);
+        sequencer_add_event(kick_sequencer, (i*2000.0)+40, NOTE_C3, SEQ_ACTOFF);
+        sequencer_add_event(kick_sequencer, (i*2000.0)+1000, NOTE_C3, SEQ_ACTON);
+        sequencer_add_event(kick_sequencer, (i*2000.0)+1040, NOTE_C3, SEQ_ACTOFF);
+        sequencer_add_event(snare_sequencer, (i*2000.0)+1000, NOTE_C3, SEQ_ACTON);
+        sequencer_add_event(snare_sequencer, (i*2000.0)+1040.0, NOTE_C3, SEQ_ACTOFF);
     }
 
     sequencer_add_event(snare_sequencer, 10000.0, NOTE_C3, SEQ_ACTEND);
