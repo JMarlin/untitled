@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
         new_sssf_from_ssmf(
             new_kick(new_cv_from_sequencer(kick_sequencer))
         ),
-        new_const_signal_mf(0.8),
+        new_const_signal_mf(1.0),
         new_const_signal_mf(0.0)
     );
   
@@ -95,8 +95,8 @@ int main(int argc, char* argv[]) {
                 500.0
             )
         ),
-        new_fixed_saw(1),
-        new_const_signal_mf(-0.8)
+        new_fixed_saw(0.125),
+        new_const_signal_mf(-0.9)
     );
 
     StereoChannel_f* snare_channel = new_scf(
