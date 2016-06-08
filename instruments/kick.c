@@ -35,27 +35,27 @@ SignalSourceMono_f* new_kick(ControlVoltage* control_voltage) {
             new_sine_vco(
                 new_cv_from_ssmf(
                     new_adder(
-                        new_const_signal_mf(-1.0),
+                        new_const_signal_mf(60.0),
                         new_multiplier(
                             env_1,
-                            new_const_signal_mf(0.01)
+                            new_const_signal_mf(4.0)
                         )
                     ),
                     new_const_signal_mf(1.0)
                 )
             ),
-            new_sine_vco(
+            new_multiplier(new_sine_vco(
                 new_cv_from_ssmf(
                     new_adder(
-                        new_const_signal_mf(-0.95),
+                        new_const_signal_mf(130),
                         new_multiplier(
                             env_3,
-                            new_const_signal_mf(0.01)
+                            new_const_signal_mf(10.0)
                         ) 
                     ),
                     new_const_signal_mf(1.0)
                 )
-            )
+            ), new_const_signal_mf(0.3333))
         ),
         env_4
     );
