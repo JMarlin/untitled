@@ -17,9 +17,9 @@ float sine_wave_function(float phase, void* environment) {
     return sinf(DEG_TO_RAD(phase));
 }
 
-SignalSourceMono_f* new_fixed_sine(float freq, float duration) {
+SignalSourceMono_f* new_fixed_sine(float freq) {
 
-    return new_fixed_wave(freq, duration, sine_wave_function, (void*)0);
+    return new_fixed_wave(freq, sine_wave_function, (void*)0);
 }
 
 SignalSourceMono_f* new_sine_vco(ControlVoltage* control_voltage) {

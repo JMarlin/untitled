@@ -9,6 +9,7 @@
 typedef struct CvFromSequencerGeneratorEnv_s {
     Sequencer* sequencer;
     unsigned note_on;
+    float last_pitch;
     uint8_t current_note;
 } CvFromSequencerGeneratorEnv;
 
@@ -17,6 +18,7 @@ int cv_from_sequencer_generator(float* pitch_sample, float* gate_sample, void* e
     CvFromSequencerGeneratorEnv* vars = (CvFromSequencerGeneratorEnv*)environment;
     SequenceMessageCollection messages;
     int i;
+    int retval = 1;
     
     if(!sequencer_pull_next_sample(vars->sequencer, &messages))
         return 0;
@@ -25,28 +27,36 @@ int cv_from_sequencer_generator(float* pitch_sample, float* gate_sample, void* e
     //take the first event in the list and reject the rest
     for(i = 0; i < messages.message_count; i++) {
 
-        printf("CV generator got ");
+        if(retval) {           
 
-        switch(messages.item[i]->action) {
+            printf("CV generator got ");
+
+            switch(messages.item[i]->action) {
         
-            case SEQ_ACTON:
-                printf("a note-on");
-                vars->current_note = messages.item[i]->note;
-                vars->note_on = 1;
-                break;
+                case SEQ_ACTON:
+                    printf("a note-on");
+                    vars->current_note = messages.item[i]->note;
+                    vars->note_on = 1;
+                    break;
 
-            case SEQ_ACTOFF:
-                printf("a note-off");
-                if(vars->current_note == messages.item[i]->note)
-                    vars->note_on = 0;
-                break;
+                case SEQ_ACTOFF:
+                    printf("a note-off");
+                    if(vars->current_note == messages.item[i]->note)
+                        vars->note_on = 0;
+                    break;
 
-            default:
-                printf("an unknown");
-                break;
+                case SEQ_ACTEND:
+                    printf("end-of-program");
+                    retval = 0;
+                    break;
+
+                default:
+                    printf("an unknown");
+                    break;
+            }
+
+            printf(" message\n");
         }
-
-        printf(" message\n");
 
         //Make sure we free the memory of the consumed
         //messages when we're finished with them
@@ -63,13 +73,17 @@ int cv_from_sequencer_generator(float* pitch_sample, float* gate_sample, void* e
         //Note: right now, we only support notes 0-96
         //anything else will cause a pitch signal of over 1.0
         pitch_sample[0] = (float)vars->current_note;
-        pitch_sample[0] *= 0.02083333333;
-        pitch_sample[0] -= 1;
+        vars->last_pitch = pitch_sample[0];
+    } else {
+
+        //Maintain last pitch value so that pitches don't
+        //change during the tail of an ADSR
+        pitch_sample[0] = vars->last_pitch;
     }
 
     gate_sample[0] = vars->note_on ? 1.0 : -1.0;
 
-    return 1;
+    return retval;
 }
 
 ControlVoltage* new_cv_from_sequencer(Sequencer* sequencer) {
@@ -91,6 +105,7 @@ ControlVoltage* new_cv_from_sequencer(Sequencer* sequencer) {
     environment->sequencer = sequencer;
     environment->note_on = 0;
     environment->current_note = 0;
+    environment->last_pitch = 0;
     control_voltage->environment = environment;
 
     return control_voltage;

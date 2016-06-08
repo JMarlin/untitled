@@ -15,10 +15,10 @@ SignalSourceMono_f* new_kick(ControlVoltage* control_voltage) {
     new_mf_split(
         new_adsr(
             control_voltage,
-            new_const_signal_mf(15.0, 10000),
-            new_const_signal_mf(20.0, 10000),
-            new_const_signal_mf(0.0, 10000),
-            new_const_signal_mf(150.0, 10000)
+            new_const_signal_mf(15.0),
+            new_const_signal_mf(20.0),
+            new_const_signal_mf(0.0),
+            new_const_signal_mf(150.0)
         ),
         &env_1,
         &env_2
@@ -35,25 +35,25 @@ SignalSourceMono_f* new_kick(ControlVoltage* control_voltage) {
             new_sine_vco(
                 new_cv_from_ssmf(
                     new_adder(
-                        new_const_signal_mf(-1.0, 10000),
+                        new_const_signal_mf(-1.0),
                         new_multiplier(
                             env_1,
-                            new_const_signal_mf(0.01, 10000)
+                            new_const_signal_mf(0.01)
                         )
                     ),
-                    new_const_signal_mf(1.0, 10000)
+                    new_const_signal_mf(1.0)
                 )
             ),
             new_sine_vco(
                 new_cv_from_ssmf(
                     new_adder(
-                        new_const_signal_mf(-0.4, 10000),
+                        new_const_signal_mf(-0.95),
                         new_multiplier(
                             env_3,
-                            new_const_signal_mf(0.01, 10000)
+                            new_const_signal_mf(0.01)
                         ) 
                     ),
-                    new_const_signal_mf(1.0, 10000)
+                    new_const_signal_mf(1.0)
                 )
             )
         ),

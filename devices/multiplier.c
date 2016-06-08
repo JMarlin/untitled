@@ -38,7 +38,7 @@ int multiplier_generator(float* sample, void* environment) {
 
     sample[0] = sample_a * sample_b;
 
-    return a_running || b_running;
+    return a_running && b_running;
 }
 
 //For later, frees everything in the supplied multiplier's environment

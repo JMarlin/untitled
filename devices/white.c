@@ -11,8 +11,8 @@ float white_wave_function(float phase, void* environment) {
     return -1.0 + 2.0*((float)rand())/RAND_MAX; 
 }
 
-SignalSourceMono_f* new_white_noise(float duration) {
+SignalSourceMono_f* new_white_noise() {
 
-    return new_fixed_wave(0, duration, white_wave_function, (void*)0);
+    return new_fixed_wave(0, white_wave_function, (void*)0);
 }
 

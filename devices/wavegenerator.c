@@ -8,8 +8,6 @@
 typedef struct FixedWaveGeneratorEnv_s {
     float current_phase; //Position along the t axis in degrees
     float freq;          //Frequency of the generator
-    float duration;      //How long to generate the signal in ms
-    float time;           //How long the signal has been running in ms
     WaveFunction wave_function;
     void* wave_environment;
 } FixedWaveGeneratorEnv;
@@ -19,11 +17,6 @@ int fixed_wave_generator(float* sample, void* environment) {
     FixedWaveGeneratorEnv* vars = (FixedWaveGeneratorEnv*)environment;
 
     float deg_per_sample = (360.0 * vars->freq)/SAMPLE_RATE;
-
-    vars->time += 1000.0/SAMPLE_RATE;
-
-    if(vars->time >= vars->duration) 
-        return 0;
 
     vars->current_phase += deg_per_sample;
 
@@ -35,7 +28,7 @@ int fixed_wave_generator(float* sample, void* environment) {
     return 1;
 }
 
-SignalSourceMono_f* new_fixed_wave(float freq, float duration, WaveFunction wave_function, void* wave_environment) {
+SignalSourceMono_f* new_fixed_wave(float freq, WaveFunction wave_function, void* wave_environment) {
 
     SignalSourceMono_f* signal = new_ssmf(fixed_wave_generator);
     
@@ -52,10 +45,8 @@ SignalSourceMono_f* new_fixed_wave(float freq, float duration, WaveFunction wave
 
     environment->current_phase = 90.0;
     environment->freq = freq;
-    environment->duration = duration;
     environment->wave_function = wave_function;
     environment->wave_environment = wave_environment;
-    environment->time = 0;
 
     signal->environment = environment;
 
@@ -85,8 +76,7 @@ int vco_wave_generator(float* sample, void* environment) {
     //Control voltages assume a volt-to-hertz scheme covering eight
     //octaves from A0 to A8  mapped over -1.0 to 1.0
     //(eg: -1.0 = 55hz, 0.0 = 880hz, 1.0 = 14080hz)
-    float freq = 55.0 * pow(2, 4.0*(1.0 + cv_pitch_sample));
-    float deg_per_sample = (360.0 * freq)/SAMPLE_RATE;
+    float deg_per_sample = (360.0 * cv_pitch_sample)/SAMPLE_RATE;
 
     sample[0] = vars->wave_function(vars->current_phase, vars->wave_environment); 
 
