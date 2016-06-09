@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
             new_envelope_sine(new_cv_from_sequencer(bass_sequencer))
         ),
         new_const_signal_mf(0.0),
-        new_const_signal_mf(-0.2)
+        new_const_signal_mf(-0.9)
     );
   
     StereoChannel_f* kick_channel = new_scf(
@@ -89,10 +89,10 @@ int main(int argc, char* argv[]) {
                         new_const_signal_mf(1.0)
                     )
                 ),
-                new_fixed_sine(0.25),
+                new_const_signal_mf(1.0), //new_fixed_sine(0.25),
                 new_const_signal_mf(0.3),
                 new_const_signal_mf(0.0),
-                500.0
+                90.0
             )
         ),
         new_fixed_saw(0.125),
@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
                 //500.0
             //)
         ),
-        new_const_signal_mf(0.0),
+        new_const_signal_mf(-0.34),
         new_const_signal_mf(-0.6)
     );
 
@@ -152,13 +152,13 @@ int main(int argc, char* argv[]) {
     for(i = 0; i < 4; i++) {
         
         sequencer_add_event(bass_sequencer, i*1000, bassline[i], SEQ_ACTON);
-        sequencer_add_event(bass_sequencer, (i*1000)+145, bassline[i], SEQ_ACTOFF); 
+        sequencer_add_event(bass_sequencer, (i*1000)+800, bassline[i], SEQ_ACTOFF); 
     }
 
     for(i = 4; i < 8; i++) {
  
         sequencer_add_event(bass_sequencer, (i+4)*1000, bassline[i], SEQ_ACTON);
-        sequencer_add_event(bass_sequencer, ((i+4)*1000)+145, bassline[i], SEQ_ACTOFF); 
+        sequencer_add_event(bass_sequencer, ((i+4)*1000)+800, bassline[i], SEQ_ACTOFF); 
     }
 
     for(i = 0; i < 8; i++) {
@@ -181,7 +181,7 @@ int main(int argc, char* argv[]) {
 
     for(j = 0; j < 16; j++) {
     
-        for(i = 0; i < 3; i++) {
+        for(i = 0; i < 6; i++) {
 
             sequencer_add_event(arp_sequencer, (j * 1000) + (i * 166.666), arp_note[i%3], SEQ_ACTON);
             sequencer_add_event(arp_sequencer, (j * 1000) + (i * 166.666) + 165, arp_note[i%3], SEQ_ACTOFF);
