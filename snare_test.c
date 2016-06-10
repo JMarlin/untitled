@@ -47,8 +47,6 @@ int main(int argc, char* argv[]) {
         )
     );
 
-    int i;
-
     for(i = 0; i < 32; i++) {
         
         sequencer_add_event(snare_sequencer, i*800, NOTE_C3, SEQ_ACTON);
