@@ -16,9 +16,9 @@ SignalSourceMono_f* new_kick(ControlVoltage* control_voltage) {
         new_adsr(
             control_voltage,
             new_const_signal_mf(15.0),
-            new_const_signal_mf(20.0),
-            new_const_signal_mf(0.0),
-            new_const_signal_mf(150.0)
+            new_const_signal_mf(160.0),
+            new_const_signal_mf(-1.0),
+            new_const_signal_mf(0.01)
         ),
         &env_1,
         &env_2
