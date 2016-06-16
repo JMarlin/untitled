@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "channel/channel.h"
 #include "devices/sine.h"
 #include "devices/square.h"
@@ -19,6 +20,7 @@
 #include "instruments/foot_hh.h"
 #include "instruments/envelope_sine.h"
 #include "instruments/snare.h"
+#include "instruments/string.h"
 
 #define BETA 100.0
 
@@ -27,6 +29,7 @@ int main(int argc, char* argv[]) {
     Sequencer* snare_sequencer = new_sequencer();
     Sequencer* kick_sequencer = new_sequencer();
     Sequencer* hh_sequencer = new_sequencer();
+    Sequencer* string_sequencer = new_sequencer();
 
     StereoChannel_f* kick_channel = new_scf(
         new_sssf_from_ssmf(
@@ -52,11 +55,21 @@ int main(int argc, char* argv[]) {
         new_const_signal_mf(-0.75)
     );
 
-    SignalSourceStereo_f* master_summer = new_summer_sf(3);
+    StereoChannel_f* string_channel = new_scf(
+        new_sssf_from_ssmf(
+            new_string(new_cv_from_sequencer(string_sequencer))
+            //new_saw_vco(new_cv_from_sequencer(string_sequencer))
+        ),
+        new_const_signal_mf(0.0),
+        new_const_signal_mf(0.0)
+    );
+
+    SignalSourceStereo_f* master_summer = new_summer_sf(4);
     summer_sf_assign_input(master_summer, 1, snare_channel);
     summer_sf_assign_input(master_summer, 2, kick_channel);
     summer_sf_assign_input(master_summer, 3, hh_channel);
-
+    summer_sf_assign_input(master_summer, 4, string_channel);
+    
     StereoChannel_i16* i16_channel = new_sci16(
         new_sssi16_from_scf(
             new_scf(
@@ -73,8 +86,26 @@ int main(int argc, char* argv[]) {
     //1 eighth note = 250ms
     //2 bars of 4 quarter notes = 500 * 2 * 4 = 4000ms
 
+    float arpeggio[] = {
+        NOTE_BF3,
+        NOTE_C4,
+        NOTE_D4,
+        NOTE_EF4,
+        NOTE_F4,
+        NOTE_G4,
+        NOTE_A4,
+        NOTE_BF4
+    };
+
     for(i = 0; i < 4; i++) {
-        
+      
+        //quarter-note string arpeggio
+        for(j = 0; j < 8; j++) {
+
+            sequencer_add_event(string_sequencer, (i * 4000) + (j * 500) - 100, arpeggio[j], SEQ_ACTON);
+            sequencer_add_event(string_sequencer, (i * 4000) + (j * 500) + 320, arpeggio[j], SEQ_ACTOFF);
+        }
+  
         //16th-note high-hat
         for(j = 0; j < 32; j++) {
      
@@ -108,7 +139,7 @@ int main(int argc, char* argv[]) {
         sequencer_add_event(kick_sequencer, (i * 4000) + 3490, NOTE_C3, SEQ_ACTOFF);        
     }
 
-    sequencer_add_event(snare_sequencer, 16000.0, NOTE_C3, SEQ_ACTEND);
+    sequencer_add_event(string_sequencer, 16000.0, NOTE_C3, SEQ_ACTEND);
 
     write_wav_pcm16_stereo("untitled.wav", i16_channel); 
    

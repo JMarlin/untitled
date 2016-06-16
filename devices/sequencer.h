@@ -164,7 +164,7 @@
 #define NOTE_B8  7902.13
 
 typedef struct SequenceMessage_s {
-    uint8_t note;
+    float note;
     uint8_t action;
 } SequenceMessage;
 
@@ -196,7 +196,7 @@ typedef struct Sequencer {
 } Sequencer;
 
 Sequencer* new_sequencer(void);
-void sequencer_add_event(Sequencer* sequencer, float time, uint8_t note, uint8_t action);
+void sequencer_add_event(Sequencer* sequencer, float time, float note, uint8_t action);
 int sequencer_pull_next_sample(Sequencer* sequencer, SequenceMessageCollection* messages);
 
 #endif //SEQUENCER_H

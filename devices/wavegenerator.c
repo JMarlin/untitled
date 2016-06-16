@@ -55,7 +55,7 @@ SignalSourceMono_f* new_fixed_wave(float freq, WaveFunction wave_function, void*
 
 typedef struct VcoWaveGeneratorEnv {
     float current_phase;
-    unsigned last_state;
+    float last_note;
     WaveFunction wave_function;
     void* wave_environment;
     ControlVoltage* control_voltage;
@@ -73,6 +73,8 @@ int vco_wave_generator(float* sample, void* environment) {
         return 0;
     }
     
+    vars->last_note = cv_pitch_sample;
+
     //Control voltages assume a volt-to-hertz scheme covering eight
     //octaves from A0 to A8  mapped over -1.0 to 1.0
     //(eg: -1.0 = 55hz, 0.0 = 880hz, 1.0 = 14080hz)
@@ -104,10 +106,10 @@ SignalSourceMono_f* new_vco_wave(ControlVoltage* control_voltage, WaveFunction w
     }
 
     environment->current_phase = 90.0;
-    environment->last_state = 0;
     environment->wave_function = wave_function;
     environment->wave_environment = wave_environment;
     environment->control_voltage = control_voltage;
+    environment->last_note = 0;
     
     signal->environment = environment;
 

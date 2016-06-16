@@ -131,7 +131,7 @@ Sequencer* new_sequencer() {
     return sequencer;
 }
 
-SequenceMessage* new_sequence_message(uint8_t note, uint8_t action) {
+SequenceMessage* new_sequence_message(float note, uint8_t action) {
     
     SequenceMessage* message = (SequenceMessage*)malloc(sizeof(SequenceMessage));
     
@@ -144,7 +144,7 @@ SequenceMessage* new_sequence_message(uint8_t note, uint8_t action) {
     return message;
 }
 
-SequenceTimingNode* new_timing_node(float time, uint8_t note, uint8_t action) {
+SequenceTimingNode* new_timing_node(float time, float note, uint8_t action) {
 
     SequenceTimingNode* new_node = (SequenceTimingNode*)malloc(sizeof(SequenceTimingNode));
 
@@ -163,7 +163,7 @@ SequenceTimingNode* new_timing_node(float time, uint8_t note, uint8_t action) {
     return new_node;
 }
 
-void sequencer_add_event(Sequencer* sequencer, float time, uint8_t note, uint8_t action) {
+void sequencer_add_event(Sequencer* sequencer, float time, float note, uint8_t action) {
 
     SequenceTimingNode* new_node = new_timing_node(time, note, action);
     

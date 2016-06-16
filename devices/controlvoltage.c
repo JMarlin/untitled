@@ -10,7 +10,7 @@ typedef struct CvFromSequencerGeneratorEnv_s {
     Sequencer* sequencer;
     unsigned note_on;
     float last_pitch;
-    uint8_t current_note;
+    float current_note;
 } CvFromSequencerGeneratorEnv;
 
 int cv_from_sequencer_generator(float* pitch_sample, float* gate_sample, void* environment) {
@@ -34,13 +34,13 @@ int cv_from_sequencer_generator(float* pitch_sample, float* gate_sample, void* e
             switch(messages.item[i]->action) {
         
                 case SEQ_ACTON:
-                    printf("a note-on");
+                    printf("a %fhz note-on", messages.item[i]->note);
                     vars->current_note = messages.item[i]->note;
                     vars->note_on = 1;
                     break;
 
                 case SEQ_ACTOFF:
-                    printf("a note-off");
+                    printf("a %fhz note-off", messages.item[i]->note);
                     if(vars->current_note == messages.item[i]->note)
                         vars->note_on = 0;
                     break;
