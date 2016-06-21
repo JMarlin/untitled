@@ -34,14 +34,14 @@ int main(int argc, char* argv[]) {
             new_scf(
                 new_sssf_from_ssmf(
                     new_vca(
-                        //new_bq_filter(
+                        new_bq_filter(
                             new_white_noise(),
-                        //    0.07227546875554755,
-                        //    -0.14047436881658693,
-                        //    0.0683107546461668,
-                        //    -1.9849872668187183,
-                        //    0.9850991214038457
-                        //),
+                            0.3044132683847495,
+                            -0.27723766055640886,
+                            0.09808412473565896,
+                            0.5448028485418657,
+                            0.22453790221868294
+                        ),
                         new_adsr(
                             new_cv_from_sequencer(test_sequencer),
                             new_const_signal_mf(0.01),
